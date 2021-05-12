@@ -1,0 +1,394 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX arena: <http://arena2036.example.org/>
+PREFIX sim: <http://ti.rw.fau.de/sim#>
+
+# Switching state from idle to busy if task queue not empty
+# Note: This here also applies for workstations
+DELETE {
+    GRAPH ?t {
+        ?t arena:status arena:idle .
+    }
+} INSERT {
+    GRAPH ?t {
+        ?t arena:status arena:busy .
+    }
+} WHERE {
+    ?t arena:status arena:idle ;
+        arena:tasks ?list .
+
+        ?list rdf:first ?task ;
+            rdf:rest ?rest .
+};
+
+# Switching state from busy to idle if task queue empty
+# Note: This here also applies for workstations
+DELETE {
+    GRAPH ?t {
+        ?t arena:status arena:busy .
+    }
+} INSERT {
+    GRAPH ?t {
+        ?t arena:status arena:idle .
+    }
+} WHERE {
+    ?t arena:status arena:busy ;
+        arena:tasks rdf:nil .
+};
+
+# Calculating new simulated location in X direction
+DELETE {
+    GRAPH ?transporter {
+        ?transporter sim:simulatedLocationX ?oldLocationX .
+    }
+} INSERT {
+    GRAPH ?transporter {
+        ?transporter sim:simulatedLocationX ?newX .
+    }
+} WHERE {
+    ?transporter a arena:Transporter ;
+        sim:simulatedLocationX ?oldLocationX ; 
+        arena:locationX ?locationX ; 
+        sim:simulatedLocationY ?locationY ; 
+        arena:speed ?speed ;
+        arena:status arena:busy ;
+        arena:tasks ?list .
+
+        ?list rdf:first ?task ;
+            rdf:rest ?rest .
+
+    ?task a arena:TransporterTask ;
+        arena:instrument ?transporter ;
+        arena:toLocationX ?toX .
+
+    FILTER(?locationX != ?toX)
+    FILTER NOT EXISTS {
+        ?station a arena:Workstation ;
+            arena:locationX1 ?locationX1 ;
+            arena:locationX2 ?locationX2 ;
+            arena:locationY1 ?locationY1 ;
+            arena:locationY2 ?locationY2 .
+        
+        FILTER(xsd:integer(FLOOR(?newX)) >= ?locationX1 && xsd:integer(FLOOR(?newX)) <= ?locationX2)
+        FILTER(xsd:integer(FLOOR(?locationY)) >= ?locationY1 && xsd:integer(FLOOR(?locationY)) <= ?locationY2)
+    }
+    FILTER NOT EXISTS {
+        ?t2 a arena:Transporter ;
+            sim:simulatedLocationX ?locationXT ;
+            sim:simulatedLocationY ?locationYT .
+        
+        FILTER(?transporter != ?t2)
+        FILTER(FLOOR(?newX) = FLOOR(?locationXT))
+        FILTER(FLOOR(?locationY) = FLOOR(?locationYT))
+    }
+    BIND(IF(?oldLocationX > ?toX, ?oldLocationX - ?speed, ?oldLocationX + ?speed) AS ?newX)
+};
+
+# Calculating new simulated location in Y direction
+DELETE {
+    GRAPH ?transporter {
+        ?transporter sim:simulatedLocationY ?oldLocationY .
+    }
+} INSERT {
+    GRAPH ?transporter {
+        ?transporter sim:simulatedLocationY ?newY .
+    }
+} WHERE {
+    ?transporter a arena:Transporter ;
+        sim:simulatedLocationY ?oldLocationY ; 
+        sim:simulatedLocationX ?locationX ; 
+        arena:locationY ?locationY ; 
+        arena:speed ?speed ;
+        arena:status arena:busy ;
+        arena:tasks ?list .
+
+        ?list rdf:first ?task ;
+            rdf:rest ?rest .
+
+    ?task a arena:TransporterTask ;
+        arena:instrument ?transporter ;
+        arena:toLocationY ?toY .
+
+    FILTER(?locationY != ?toY)
+    FILTER NOT EXISTS {
+        ?station a arena:Workstation ;
+            arena:locationX1 ?locationX1 ;
+            arena:locationX2 ?locationX2 ;
+            arena:locationY1 ?locationY1 ;
+            arena:locationY2 ?locationY2 .
+        FILTER(xsd:integer(FLOOR(?newY)) >= ?locationY1 && xsd:integer(FLOOR(?newY)) <= ?locationY2)
+        FILTER(xsd:integer(FLOOR(?locationX)) >= ?locationX1 && xsd:integer(FLOOR(?locationX)) <= ?locationX2)
+    }
+    FILTER NOT EXISTS {
+        ?t2 a arena:Transporter ;
+            sim:simulatedLocationX ?locationXT ;
+            sim:simulatedLocationY ?locationYT .
+        
+        FILTER(?transporter != ?t2)
+        FILTER(FLOOR(?newY) = FLOOR(?locationYT))
+        FILTER(FLOOR(?locationX) = FLOOR(?locationXT))
+    }
+    BIND(IF(?oldLocationY > ?toY, ?oldLocationY - ?speed, ?oldLocationY + ?speed) AS ?newY)
+};
+
+# Updating the real X location of transporter if a new cell has been reached
+DELETE {
+    GRAPH ?transporter {
+        ?transporter arena:locationX ?oldLocationX .
+    }
+} INSERT {
+    GRAPH ?transporter {
+        ?transporter arena:locationX ?newLocationX .
+    }
+} WHERE {
+    ?transporter a arena:Transporter ;
+        arena:locationX ?oldLocationX ;
+        sim:simulatedLocationX ?locationX .
+
+    BIND(xsd:integer(FLOOR(?locationX)) AS ?newLocationX)
+    FILTER(?newLocationX != ?oldLocationX)
+};
+
+# Updating the X location of a product if the carrying transporter has moved
+DELETE {
+    GRAPH ?product {
+        ?product arena:locationX ?oldLocationX .
+    }
+} INSERT {
+    GRAPH ?product {
+        ?product arena:locationX ?newLocationX .
+    }
+} WHERE {
+    GRAPH ?transporter {
+        ?transporter a arena:Transporter ;
+            arena:locationX ?newLocationX ;
+            arena:products ?product .
+    }
+
+    GRAPH ?product {
+        ?product arena:locationX ?oldLocationX .
+    }
+    FILTER(?newLocationX != ?oldLocationX)
+};
+
+# Updating the real Y location of transporter if a new cell has been reached
+DELETE {
+    GRAPH ?transporter {
+        ?transporter arena:locationY ?oldLocationY .
+    }
+} INSERT {
+    GRAPH ?transporter {
+        ?transporter arena:locationY ?newLocationY .
+    }
+} WHERE {
+    ?transporter a arena:Transporter ;
+        arena:locationY ?oldLocationY ;
+        sim:simulatedLocationY ?locationY .
+
+    BIND(xsd:integer(FLOOR(?locationY)) AS ?newLocationY)
+    FILTER(?newLocationY != ?oldLocationY)
+};
+
+# Updating the Y location of a product if the carrying transporter has moved
+DELETE {
+    GRAPH ?product {
+        ?product arena:locationY ?oldLocationY .
+    }
+} INSERT {
+    GRAPH ?product {
+        ?product arena:locationY ?newLocationY .
+    }
+} WHERE {
+    GRAPH ?transporter {
+        ?transporter a arena:Transporter ;
+            arena:locationY ?newLocationY ;
+            arena:products ?product .
+    }
+
+    GRAPH ?product {
+        ?product arena:locationY ?oldLocationY .
+    }
+    FILTER(?newLocationY != ?oldLocationY)
+};
+
+# Removing current task from task queue if fulfilled (i. e. location is correct, everything loaded and unloaded) and at end time
+DELETE {
+    GRAPH ?queue {
+        ?transporter arena:tasks ?list .
+
+        ?list rdf:first ?task ;
+    	    rdf:rest ?rest .
+    }
+} INSERT {
+    GRAPH ?queue {
+        ?transporter arena:tasks ?rest .
+    }
+    GRAPH ?transporter {
+        ?transporter arena:products ?input .
+    }
+    GRAPH ?task {
+        ?task arena:endTime ?time .
+    }
+} WHERE {
+    ?transporter a arena:Transporter ;
+        arena:locationX ?locationX ; 
+        arena:locationY ?locationY ; 
+        arena:tasks ?list ;
+        arena:queue ?queue .
+
+    ?list rdf:first ?task ;
+        rdf:rest ?rest .
+
+    ?task a arena:TransporterTask ;
+        arena:instrument ?transporter ;
+        arena:toLocationX ?locationX ;
+        arena:toLocationY ?locationY .
+
+    FILTER NOT EXISTS {
+        ?task arena:input ?product .
+        ?port arena:products ?product .
+    
+        FILTER(?port != ?transporter)
+    }
+
+    FILTER NOT EXISTS {
+        ?task arena:output ?product .
+        ?transporter arena:products ?product .
+    }
+
+    <sim> sim:currentTime [
+        time:inXSDDateTimeStamp ?time
+    ] .
+};
+
+# Loading products from port to transporter when at goal location and sufficient capacity
+DELETE {
+    GRAPH ?transporter {
+        ?transporter arena:capacity ?capacityTransporter .
+    }
+    GRAPH ?station {
+        ?port arena:capacity ?capacityPort ;
+            arena:products ?product .
+    }
+} INSERT {
+    GRAPH ?transporter {
+        ?transporter arena:capacity ?newCapacityTransporter ;
+            arena:products ?product .
+    }
+    GRAPH ?station {
+        ?port arena:capacity ?newCapacityPort .
+    }
+} WHERE {
+    ?transporter a arena:Transporter ;
+        arena:locationX ?locationX ; 
+        arena:locationY ?locationY ; 
+        arena:capacity ?capacityTransporter ;
+        arena:tasks ?list .
+
+    ?list rdf:first ?task ;
+        rdf:rest ?rest .
+
+    ?task a arena:TransporterTask ;
+        arena:instrument ?transporter ;
+        arena:toLocationX ?locationX ;
+        arena:toLocationY ?locationY ;
+        arena:input ?product .
+
+    GRAPH ?station {
+        ?station a arena:Workstation .
+
+        ?port arena:locationX ?locationX ;
+            arena:locationY ?locationY ;
+            arena:capacity ?capacityPort ;
+            arena:products ?product .
+    }
+
+    {
+        SELECT (COUNT (?product) AS ?num) ?port
+        WHERE {
+            ?port arena:products ?product .
+        }
+        GROUP BY ?port
+    }
+
+    FILTER(?capacityTransporter >= ?num)
+    BIND(?capacityTransporter - ?num AS ?newCapacityTransporter)
+    BIND(?capacityPort + ?num AS ?newCapacityPort)
+};
+
+# Loading products from transporter to port when at goal location and sufficient capacity
+DELETE {
+    GRAPH ?transporter {
+        ?transporter arena:capacity ?capacityTransporter ;
+            arena:products ?product .
+    }
+    GRAPH ?station {
+        ?port arena:capacity ?capacityPort .
+    }
+} INSERT {
+    GRAPH ?transporter {
+        ?transporter arena:capacity ?newCapacityTransporter .
+    }
+    GRAPH ?station {
+        ?port arena:capacity ?newCapacityPort ;
+            arena:products ?product .
+    }
+} WHERE {
+    ?transporter a arena:Transporter ;
+        arena:locationX ?locationX ; 
+        arena:locationY ?locationY ; 
+        arena:capacity ?capacityTransporter ;
+        arena:products ?product ;
+        arena:tasks ?list .
+
+    ?list rdf:first ?task ;
+        rdf:rest ?rest .
+
+    ?task a arena:TransporterTask ;
+        arena:instrument ?transporter ;
+        arena:toLocationX ?locationX ;
+        arena:toLocationY ?locationY ;
+        arena:output ?product .
+
+    GRAPH ?station {
+        ?station a arena:Workstation .
+
+        ?port arena:locationX ?locationX ;
+            arena:locationY ?locationY ;
+            arena:capacity ?capacityPort .
+    }
+
+    {
+        SELECT (COUNT (?product) AS ?num) ?transporter
+        WHERE {
+            ?transporter arena:products ?product .
+        }
+        GROUP BY ?transporter
+    }
+
+    FILTER(?capacityPort >= ?num)
+    BIND(?capacityTransporter + ?num AS ?newCapacityTransporter)
+    BIND(?capacityPort - ?num AS ?newCapacityPort)
+};
+
+# When a task is the first in queue and has no start time, add one 
+# Note: This here also applies for workstation tasks
+INSERT {
+    GRAPH ?task {
+        ?task arena:startTime ?time .
+    }
+} WHERE {
+    ?t arena:tasks ?list .
+
+    ?list rdf:first ?task ;
+        rdf:rest ?rest .
+
+    FILTER NOT EXISTS {
+        ?task arena:startTime ?start .
+    }
+
+    <sim> sim:currentTime [
+        time:inXSDDateTimeStamp ?time
+    ] .
+};

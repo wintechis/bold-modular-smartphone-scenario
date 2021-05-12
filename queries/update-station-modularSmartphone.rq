@@ -1,0 +1,202 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX arena: <http://arena2036.example.org/>
+PREFIX sim: <http://ti.rw.fau.de/sim#>
+PREFIX time: <http://www.w3.org/2006/time#>
+
+# If station is busy and already has a remaining time, remove location of inputs of first task and adapt port's capacity
+DELETE {
+    GRAPH ?product {
+        ?product arena:locationX ?locationX ;
+            arena:locationY ?locationY .
+    }
+    GRAPH ?station {
+        ?port arena:products ?product ;
+            arena:capacity ?capacity .
+    }
+} INSERT {
+    GRAPH ?station {
+        ?port arena:capacity ?newCapacity .
+    }
+} WHERE {
+    ?station a arena:Workstation ;
+        arena:status arena:busy ;
+        sim:simulatedRemainingTime ?time ;
+        arena:inputPort ?port ;
+        arena:tasks ?list .
+
+    ?list rdf:first ?task ;
+        rdf:rest ?rest .
+
+    ?task a arena:WorkstationTask ;
+        arena:recipe ?recipe ;
+        arena:instrument ?station ;
+        arena:input ?product .
+
+    ?product a arena:Product ;
+        arena:locationX ?locationX ;
+        arena:locationY ?locationY .
+
+    ?port a arena:Port ;
+        arena:products ?product ;
+        arena:capacity ?capacity .
+
+    FILTER(BOUND(?capacity))
+
+    BIND(?capacity + ?num AS ?newCapacity)
+
+    {
+        SELECT (COUNT (?product) AS ?num) ?port ?task
+        WHERE {
+            ?port arena:products ?product .
+
+            ?task arena:input ?product .
+        }
+        GROUP BY ?port ?task
+    }
+};
+
+# Determining new random processing time for task if none present, station busy and all inputs are there
+INSERT {
+    GRAPH ?station {
+        ?station sim:simulatedRemainingTime ?time .
+    }
+} WHERE {
+    ?station a arena:Workstation ;
+        arena:recipe ?recipe ;
+        arena:status arena:busy ;
+        arena:tasks ?list .
+
+    ?list rdf:first ?task ;
+        rdf:rest ?rest .
+
+    ?task a arena:WorkstationTask ;
+        arena:recipe ?recipe ;
+        arena:instrument ?station .
+
+    ?recipe a arena:Recipe ;
+        arena:baseProcessingTime ?baseTime ;
+        arena:processingTimeVariance ?timeVariance .
+
+    OPTIONAL {
+        ?recipe arena:inputProcessingTime ?inputTime .
+    }
+
+    FILTER NOT EXISTS {
+        ?station sim:simulatedRemainingTime ?t .
+    }
+
+    FILTER NOT EXISTS {
+        ?station arena:inputPort ?port .
+
+        ?task arena:input ?product .
+
+        ?p arena:products ?product .
+
+        FILTER(?p != ?port)
+    }
+
+    BIND(?baseTime + COALESCE(?inputTime, 0) * ?num AS ?baseInputTime)
+    BIND(sim:rand(?task, 1) AS ?sign)
+    BIND(sim:rand(?task, 2) AS ?rand)
+    BIND(xsd:integer(ROUND(IF(?sign >= 0.5, ?baseInputTime + ?timeVariance * ?rand, ?baseInputTime + ?timeVariance * ?rand * -1))) AS ?time)
+
+    {
+        SELECT (COUNT(?product) AS ?num) ?task
+        WHERE {
+            ?task a arena:WorkstationTask .
+
+            OPTIONAL {
+                ?task arena:input ?product .
+            }
+        }
+        GROUP BY ?task
+    }
+};
+
+# Calculating new simulated remaining time
+DELETE {
+    GRAPH ?transporter {
+        ?station sim:simulatedRemainingTime ?time .
+    }
+} INSERT {
+    GRAPH ?station {
+        ?station sim:simulatedRemainingTime ?newTime .
+    }
+} WHERE {
+    ?station a arena:Workstation ;
+        sim:simulatedRemainingTime ?time ;
+        arena:status arena:busy .
+
+    BIND(?time - 1 AS ?newTime)
+    FILTER(?time > 0)
+};
+
+# Removing current task from task queue (with timestamp) and putting product to output port (with capacity) if simulated remaining time is zero and there is capacity in the output
+DELETE {
+    GRAPH ?station {
+        ?station sim:simulatedRemainingTime 0 .
+
+        ?port arena:capacity ?capacity .
+    }
+    GRAPH ?queue {
+        ?station arena:tasks ?list .
+
+        ?list rdf:first ?task ;
+    	    rdf:rest ?rest .
+    }
+} INSERT {
+    GRAPH ?station {
+        ?port arena:products ?product ;
+            arena:capacity ?newCapacity .
+    }
+    GRAPH ?task {
+        ?task arena:endTime ?time .
+    }
+    GRAPH ?queue {
+        ?station arena:tasks ?rest .
+    }
+    GRAPH ?product {
+        ?product a arena:Product ;
+            arena:kind ?kind ;
+            arena:locationX ?locationX ;
+            arena:locationY ?locationY .
+    }
+} WHERE {
+    ?station a arena:Workstation ;
+        sim:simulatedRemainingTime 0 ;
+        arena:outputPort ?port ;
+        arena:queue ?queue ;
+        arena:tasks ?list .
+
+    ?port a arena:Port ;
+        arena:capacity ?capacity ;
+        arena:locationX ?locationX ;
+        arena:locationY ?locationY .
+
+    ?list rdf:first ?task ;
+        rdf:rest ?rest .
+
+    ?task a arena:WorkstationTask ;
+        arena:recipe ?recipe ;
+        arena:output ?product .
+
+    ?recipe a arena:Recipe ;
+        arena:yieldsProducts ?kind .
+
+    FILTER(BOUND(?capacity))
+
+    BIND(?capacity - ?num AS ?newCapacity)
+
+    {
+        SELECT (COUNT (?product) AS ?num) ?task
+        WHERE {
+            ?task arena:output ?product .
+        }
+        GROUP BY ?task
+    }
+
+    <sim> sim:currentTime [
+        time:inXSDDateTimeStamp ?time
+    ] .
+};

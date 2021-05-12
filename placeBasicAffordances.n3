@@ -1,0 +1,304 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix http: <http://www.w3.org/2011/http#> .
+@prefix httpm: <http://www.w3.org/2011/http-methods#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix arena: <http://arena2036.example.org/> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix : <http://127.0.1.1:8080/> .
+
+{
+    [] http:mthd httpm:GET ;
+        http:requestURI :stations .
+}
+
+{
+    [] http:mthd httpm:GET ;
+        http:requestURI :recipes .
+}
+
+{
+    ?station a arena:Workstation .
+} => {
+    [] http:mthd httpm:GET ;
+        http:requestURI ?station .
+} .
+
+{
+    ?recipe a arena:Recipe .
+} => {
+    [] http:mthd httpm:GET ;
+        http:requestURI ?recipe .
+} .
+
+# Only one output
+{
+    ?station a arena:Workstation ;
+        arena:skills ?skill ;
+        arena:affordances ?affordances ;
+        arena:outputPort ?port .
+
+    ?port arena:locationX ?locationX ;
+        arena:locationY ?locationY .
+
+    ?recipe arena:requiresSkill ?skill ;
+        arena:yieldsProducts ?product ;
+        arena:requiresProducts arena:none .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?affordances ;
+        http:body {
+            ?station arena:affords _:aff .
+
+            _:aff a arena:Affordance ; ; 
+                arena:task _:task ;
+                arena:precondition arena:none ;
+                arena:postcondition _:postc1, _:postc2, _:postc3, _:postc4 .
+
+            _:task arena:instrument ?station ;
+                arena:recipe ?recipe ;
+                arena:output _:p .
+
+            _:postc1 rdf:subject _:p ;
+                rdf:predicate rdf:type ;
+                rdf:object arena:Product .
+
+            _:postc2 rdf:subject _:p ;
+                rdf:predicate arena:kind ;
+                rdf:object ?product .
+
+            _:postc3 rdf:subject _:p ;
+                rdf:predicate arena:locationX ;
+                rdf:object ?locationX .
+
+            _:postc4 rdf:subject _:p ;
+                rdf:predicate arena:locationY ;
+                rdf:object ?locationY .
+        } .
+} .
+
+# Only one input
+{
+    ?station a arena:Workstation ;
+        arena:recipe ?recipe ;
+        arena:affordances ?affordances ;
+        arena:inputPort ?port .
+
+    ?port arena:locationX ?locationX ;
+        arena:locationY ?locationY .
+
+    ?recipe arena:requiresProducts ?product ;
+        arena:yieldsProducts arena:none .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?affordances ;
+        http:body {
+            ?station arena:affords _:aff .
+
+            _:aff a arena:Affordance ; ; 
+                arena:task _:task ;
+                arena:precondition _:prec1, _:prec2, _:prec3, _:prec4 ;
+                arena:postcondition arena:none .
+
+            _:task arena:instrument ?station ;
+                arena:recipe ?recipe ;
+                arena:input _:p .
+            
+            _:prec1 rdf:subject _:p ;
+                rdf:predicate rdf:type ;
+                rdf:object arena:Product .
+
+            _:prec2 rdf:subject _:p ;
+                rdf:predicate arena:kind ;
+                rdf:object ?product .
+            
+            _:prec3 rdf:subject _:p ;
+                rdf:predicate arena:locationX ;
+                rdf:object ?locationX .
+
+            _:prec4 rdf:subject _:p ;
+                rdf:predicate arena:locationY ;
+                rdf:object ?locationY .
+        } .
+} .
+
+## One input, one output
+#{
+#    ?station a arena:Workstation ;
+#        arena:recipe ?recipe ;
+#        arena:affordances ?affordances ;
+#        arena:inputPort ?portIn ;
+#        arena:outputPort ?portOut .
+#
+#    ?portIn arena:locationX ?locationXIn ;
+#        arena:locationY ?locationYIn .
+#
+#    ?recipe arena:requiresProducts ?productIn ;
+#        arena:yieldsProducts ?productOut .
+#} => {
+#    [] http:mthd httpm:PUT ;
+#        http:requestURI ?affordances ;
+#        http:body {
+#            ?station arena:affords _:aff .
+#
+#            _:aff a arena:Affordance ; ; 
+#                arena:task _:task ;
+#                arena:precondition _:prec1l ;
+#                arena:postcondition _:postc1l .
+#
+#            _:task arena:instrument ?station ;
+#                arena:recipe ?recipe ;
+#                arena:input _:pIn ;
+#                arena:output _:pOut .
+#
+#            _:prec1l rdf:first _:prec1 ;
+#                rdf:rest _:prec2l .
+#            
+#            _:prec1 rdf:subject _:pIn ;
+#                rdf:predicate rdf:type ;
+#                rdf:object arena:Product .
+#
+#            _:prec2l rdf:first _:prec2 ;
+#                rdf:rest rdf:nil .
+#            
+#            _:prec2 rdf:subject _:pIn ;
+#                rdf:predicate arena:kind ;
+#                rdf:object ?productIn .
+#
+#            _:postc1l rdf:first _:postc1 ;
+#                rdf:rest _:postc2l .
+#            
+#            _:postc1 rdf:subject _:pOut ;
+#                rdf:predicate rdf:type ;
+#                rdf:object arena:Product .
+#
+#            _:postc2l rdf:first _:postc2 ;
+#                rdf:rest rdf:nil .
+#            
+#            _:postc2 rdf:subject _:pOut ;
+#                rdf:predicate arena:kind ;
+#                rdf:object ?productOut .
+#        } .
+#} .
+
+# Four inputs, one output
+{
+    ?station a arena:Workstation ;
+        arena:recipe ?recipe ;
+        arena:affordances ?affordances ;
+        arena:inputPort ?portIn ;
+        arena:outputPort ?portOut .
+
+    ?portIn arena:locationX ?locationXIn ;
+        arena:locationY ?locationYIn .
+
+    ?portOut arena:locationX ?locationXOut ;
+        arena:locationY ?locationYOut .
+
+    ?recipe arena:requiresProducts ?productIn1, ?productIn2, ?productIn3, ?productIn4 ;
+        arena:yieldsProducts ?productOut .
+
+    ?productIn1 log:notEqualTo ?productIn2 .
+    ?productIn1 log:notEqualTo ?productIn3 .
+    ?productIn1 log:notEqualTo ?productIn4 .
+    ?productIn2 log:notEqualTo ?productIn3 .
+    ?productIn2 log:notEqualTo ?productIn4 .
+    ?productIn3 log:notEqualTo ?productIn4 .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?affordances ;
+        http:body {
+            ?station arena:affords _:aff .
+
+            _:aff a arena:Affordance ;
+                arena:task _:task ;
+                arena:precondition _:pre1c1, _:pre1c2, _:pre1c3, _:pre1c4, _:pre2c1, _:pre2c2, _:pre2c3, _:pre2c4  _:pre3c1, _:pre3c2, _:pre3c3, _:pre3c4, _:pre4c1, _:pre4c2, _:pre4c3, _:pre4c4;
+                arena:postcondition _:postc1, _:postc2, _:postc3, _:postc4 .
+
+            _:task arena:instrument ?station ;
+                arena:recipe ?recipe ;
+                arena:input _:pIn1, _:pIn2, _:pIn3, _:pIn4 ;
+                arena:output _:pOut .
+            
+            _:pre1c1 rdf:subject _:pIn1 ;
+                rdf:predicate rdf:type ;
+                rdf:object arena:Product .
+            
+            _:pre1c2 rdf:subject _:pIn1 ;
+                rdf:predicate arena:kind ;
+                rdf:object ?productIn1 .
+            
+            _:pre1c3 rdf:subject _:pIn1 ;
+                rdf:predicate arena:locationX ;
+                rdf:object ?locationXIn .
+            
+            _:pre1c4 rdf:subject _:pIn1 ;
+                rdf:predicate arena:locationY ;
+                rdf:object ?locationYIn .
+            
+            _:pre2c1 rdf:subject _:pIn2 ;
+                rdf:predicate rdf:type ;
+                rdf:object arena:Product .
+
+            _:pre2c2 rdf:subject _:pIn2 ;
+                rdf:predicate arena:kind ;
+                rdf:object ?productIn2 .
+            
+            _:pre2c3 rdf:subject _:pIn2 ;
+                rdf:predicate arena:locationX ;
+                rdf:object ?locationXIn .
+            
+            _:pre2c4 rdf:subject _:pIn2 ;
+                rdf:predicate arena:locationY ;
+                rdf:object ?locationYIn .
+            
+            _:pre3c1 rdf:subject _:pIn3 ;
+                rdf:predicate rdf:type ;
+                rdf:object arena:Product .
+            
+            _:pre3c2 rdf:subject _:pIn3 ;
+                rdf:predicate arena:kind ;
+                rdf:object ?productIn3 .
+            
+            _:pre3c3 rdf:subject _:pIn3 ;
+                rdf:predicate arena:locationX ;
+                rdf:object ?locationXIn .
+            
+            _:pre3c4 rdf:subject _:pIn3 ;
+                rdf:predicate arena:locationY ;
+                rdf:object ?locationYIn .
+            
+            _:pre4c1 rdf:subject _:pIn4 ;
+                rdf:predicate rdf:type ;
+                rdf:object arena:Product .
+            
+            _:pre4c2 rdf:subject _:pIn4 ;
+                rdf:predicate arena:kind ;
+                rdf:object ?productIn4 .
+            
+            _:pre4c3 rdf:subject _:pIn4 ;
+                rdf:predicate arena:locationX ;
+                rdf:object ?locationXIn .
+            
+            _:pre4c4 rdf:subject _:pIn4 ;
+                rdf:predicate arena:locationY ;
+                rdf:object ?locationYIn .
+
+            _:postc1 rdf:subject _:pOut ;
+                rdf:predicate rdf:type ;
+                rdf:object arena:Product .
+            
+            _:postc2 rdf:subject _:pOut ;
+                rdf:predicate arena:kind ;
+                rdf:object ?productOut .
+            
+            _:postc3 rdf:subject _:pOut ;
+                rdf:predicate arena:locationX ;
+                rdf:object ?locationXOut .
+
+            _:postc4 rdf:subject _:pOut ;
+                rdf:predicate arena:locationY ;
+                rdf:object ?locationYOut .
+        } .
+} .

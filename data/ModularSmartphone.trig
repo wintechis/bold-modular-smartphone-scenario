@@ -1,0 +1,303 @@
+@prefix arena: <http://arena2036.example.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<shopfloor> {
+    <shopfloor> a arena:Shopfloor ;
+        arena:sizeX 50 ;
+        arena:sizeY 50 .
+}
+
+<order1> {
+    <order1> a arena:Order ;
+        arena:kind arena:smartphone ;
+        arena:ramSize 6 ;
+        arena:cpuCores 2 ;
+        arena:deadline "2020-05-21T09:00:00Z"^^xsd:dateTime .
+}
+
+<order2> {
+    <order2> a arena:Order ;
+        arena:kind arena:smartphone ;
+        arena:ramSize 8 ;
+        arena:cpuCores 4 ;
+        arena:deadline "2020-05-21T10:00:00Z"^^xsd:dateTime .
+}
+
+<recipes> {
+    <mainboardRecipe> a arena:Recipe .
+    <cpuRecipe> a arena:Recipe .
+    <ramRecipe> a arena:Recipe .
+    <flashMemoryRecipe> a arena:Recipe .
+    <mainModuleRecipe> a arena:Recipe .
+}
+
+<mainboardRecipe> {
+    <mainboardRecipe> a arena:Recipe ;
+        arena:requiresSkill arena:mainboardStorage ;
+        arena:requiresProducts arena:none ;
+        arena:yieldsProducts arena:mainboard ;
+        arena:baseProcessingTime 4 ;
+        arena:processingTimeVariance 1 .
+}
+
+<cpuRecipe> {
+    <cpuRecipe> a arena:Recipe ;
+        arena:requiresSkill arena:cpuStorage ;
+        arena:requiresProducts arena:none ;
+        arena:yieldsProducts arena:cpu ;
+        arena:baseProcessingTime 5 ;
+        arena:processingTimeVariance 1 .
+}
+
+<ramRecipe> {
+    <ramRecipe> a arena:Recipe ;
+        arena:requiresSkill arena:memoryStorage ;
+        arena:requiresProducts arena:none ;
+        arena:yieldsProducts arena:ram ;
+        arena:baseProcessingTime 3 ;
+        arena:processingTimeVariance 1 .
+}
+
+<flashMemoryRecipe> {
+    <flashMemoryRecipe> a arena:Recipe ;
+        arena:requiresSkill arena:memoryStorage ;
+        arena:requiresProducts arena:none ;
+        arena:yieldsProducts arena:flashMemory ;
+        arena:baseProcessingTime 4 ;
+        arena:processingTimeVariance 2 .
+}
+
+<mainModuleRecipe> {
+    <mainModuleRecipe> a arena:Recipe ;
+        arena:requiresProducts arena:cpu, arena:ram, arena:flashMemory, arena:mainboard ;
+        arena:requiresSkill arena:soldering ;
+        arena:yieldsProducts arena:mainModule ;
+        arena:baseProcessingTime 6 ;
+        arena:inputProcessingTime 1 ;
+        arena:processingTimeVariance 2 .
+}
+
+<transporter1> {
+    <transporter1> a arena:Transporter ;    
+        arena:locationX 11 ;
+        arena:locationY 8 ;
+        arena:speed 1 ;
+        arena:status arena:idle ;
+        arena:capacity 2 ;
+        arena:products <product1>, <product3>, <product4> ;
+        arena:queue <transporter1TaskQueue> .
+}
+
+<transporter1TaskQueue> {
+    <transporter1> arena:tasks ( <transporterTask1> <transporterTask3> ) .
+}
+
+<transporterTask1> {
+    <transporterTask1> a arena:TransporterTask ;
+        arena:instrument <transporter1> ;
+        arena:toLocationX 29 ;
+        arena:toLocationY 10 ;
+        arena:input <product2> ;
+        arena:output <product1>, <product3>, <product4> .
+}
+
+<transporterTask3> {
+    <transporterTask3> a arena:TransporterTask ;
+        arena:instrument <transporter1> ;
+        arena:toLocationX 40 ;
+        arena:toLocationY 40 .
+}
+
+<transporter2> {
+    <transporter2> a arena:Transporter ;    
+        arena:locationX 12 ;
+        arena:locationY 9 ;
+        arena:speed 0.5 ;
+        arena:status arena:idle ;
+        arena:capacity 4 ;
+        arena:queue <transporter2TaskQueue> .
+}
+
+<transporter2TaskQueue> {
+    <transporter2> arena:tasks ( <transporterTask2> ) .
+}
+
+<transporterTask2> {
+    <transporterTask2> a arena:TransporterTask ;
+        arena:instrument <transporter2> ;
+        arena:toLocationX 30 ;
+        arena:toLocationY 7 .
+}
+
+<product1> {
+    <product1> a arena:Product ;
+        arena:kind arena:cpu ;
+        arena:locationX 11 ;
+        arena:locationY 8 ;
+        arena:cpuCores 2 .
+}
+
+<product2> {
+    <product2> a arena:Product ;
+        arena:kind arena:cpu ;
+        arena:locationX 29 ;
+        arena:locationY 10 ;
+        arena:cpuCores 4 .
+}
+
+<product3> {
+    <product3> a arena:Product ;
+        arena:kind arena:ram ;
+        arena:locationX 11 ;
+        arena:locationY 8 .
+}
+
+<product4> {
+    <product4> a arena:Product ;
+        arena:kind arena:mainboard ;
+        arena:locationX 11 ;
+        arena:locationY 8 .
+}
+
+<product5> {
+    <product5> a arena:Product ;
+        arena:kind arena:flashMemory ;
+        arena:locationX 29 ;
+        arena:locationY 10 .
+}
+
+<stations> {
+    <solderingStation1> a arena:Workstation .
+    <memoryStorageStation1> a arena:Workstation .
+    <cpuStorageStation1> a arena:Workstation .
+    <mainboardStorageStation1> a arena:Workstation .
+}
+
+<solderingStation1> {
+    <solderingStation1> a arena:Workstation ;
+        arena:locationX1 30 ;
+        arena:locationY1 10 ;
+        arena:locationX2 33 ;
+        arena:locationY2 11 ;
+        arena:skills arena:soldering ;
+        arena:queue <solderingStation1TaskQueue> ;
+        arena:affordances <solderingStation1Affordances> ;
+        arena:recipe <mainModuleRecipe> ;
+        arena:status arena:idle ;
+        arena:inputPort [
+            a arena:Port ;
+            arena:locationX 29 ;
+            arena:locationY 10 ;
+            arena:capacity 5 ;
+            arena:products <product2>, <product5>
+        ] ;
+        arena:outputPort [
+            a arena:Port ;
+            arena:locationX 34 ;
+            arena:locationY 11 ;
+            arena:capacity 2
+        ] .
+}
+
+<solderingStation1TaskQueue> {
+    <solderingStation1> arena:tasks ( <solderingTask1> ) .
+}
+
+<solderingTask1> {
+    <solderingTask1> a arena:WorkstationTask ;
+        arena:instrument <solderingStation1> ;
+        arena:recipe <mainModuleRecipe> ;
+        arena:input <product1>, <product3>, <product4>, <product5> ;
+        arena:output <product6> .
+}
+
+<memoryStorageStation1> {
+    <memoryStorageStation1> a arena:Workstation ;
+        arena:locationX1 0 ;
+        arena:locationY1 0 ;
+        arena:locationX2 1 ;
+        arena:locationY2 1 ;
+        arena:skills arena:memoryStorage ;
+        arena:queue <memoryStorageStation1TaskQueue> ;
+        arena:affordances <memoryStorageStation1Affordances> ;
+        arena:recipe <ramRecipe> ;
+        arena:status arena:idle ;
+        arena:outputPort [
+            a arena:Port ;
+            arena:locationX 2 ;
+            arena:locationY 1 ;
+            arena:capacity 1
+        ] .
+}
+
+<memoryStorageStation1TaskQueue> {
+    <memoryStorageStation1> arena:tasks ( <memoryStorageTask1> ) .
+}
+
+<memoryStorageTask1> {
+    <memoryStorageTask1> a arena:WorkstationTask ;
+        arena:instrument <memoryStorageStation1> ;
+        arena:recipe <ramRecipe> ;
+        arena:output <ram1> .
+}
+
+<cpuStorageStation1> {
+    <cpuStorageStation1> a arena:Workstation ;
+        arena:locationX1 0 ;
+        arena:locationY1 7 ;
+        arena:locationX2 1 ;
+        arena:locationY2 8 ;
+        arena:skills arena:cpuStorage ;
+        arena:queue <cpuStorageStation1TaskQueue> ;
+        arena:affordances <cpuStorageStation1Affordances> ;
+        arena:recipe <cpuRecipe> ;
+        arena:status arena:idle ;
+        arena:outputPort [
+            a arena:Port ;
+            arena:locationX 2 ;
+            arena:locationY 8 ;
+            arena:capacity 1
+        ] .
+}
+
+<cpuStorageStation1TaskQueue> {
+    <cpuStorageStation1> arena:tasks ( <cpuStorageTask1> ) .
+}
+
+<cpuStorageTask1> {
+    <cpuStorageTask1> a arena:WorkstationTask ;
+        arena:instrument <cpuStorageStation1> ;
+        arena:recipe <cpuRecipe> ;
+        arena:output <cpu1> .
+}
+
+<mainboardStorageStation1> {
+    <mainboardStorageStation1> a arena:Workstation ;
+        arena:locationX1 0 ;
+        arena:locationY1 14 ;
+        arena:locationX2 1 ;
+        arena:locationY2 15 ;
+        arena:skills arena:mainboardStorage ;
+        arena:queue <mainboardStorageStation1TaskQueue> ;
+        arena:affordances <mainboardStorageStation1Affordances> ;
+        arena:recipe <mainboardRecipe> ;
+        arena:status arena:idle ;
+        arena:outputPort [
+            a arena:Port ;
+            arena:locationX 2 ;
+            arena:locationY 15 ;
+            arena:capacity 1
+        ] .
+}
+
+<mainboardStorageStation1TaskQueue> {
+    <mainboardStorageStation1> arena:tasks ( <mainboardStorageTask1> ) .
+}
+
+<mainboardStorageTask1> {
+    <mainboardStorageTask1> a arena:WorkstationTask ;
+        arena:instrument <mainboardStorageStation1> ;
+        arena:recipe <mainboardRecipe> ;
+        arena:output <mainboard1> .
+}

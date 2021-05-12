@@ -1,0 +1,69 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix http: <http://www.w3.org/2011/http#> .
+@prefix httpm: <http://www.w3.org/2011/http-methods#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix arena: <http://arena2036.example.org/> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <http://127.0.1.1:8080/> .
+
+{
+    [] http:mthd httpm:GET ;
+        http:requestURI :stations .
+}
+
+{
+    ?station a arena:Workstation .
+} => {
+    [] http:mthd httpm:GET ;
+        http:requestURI ?station .
+} .
+
+{
+    ?station a arena:Workstation ;
+        arena:queue ?queue .
+} => {
+    [] http:mthd httpm:GET ;
+        http:requestURI ?queue .
+} .
+
+{
+    ?station a arena:Workstation ;
+        arena:queue ?queue ;
+        arena:tasks rdf:nil .
+} => {
+    ?station <newTask> ?task .
+} .
+
+{
+    ?station a arena:Workstation ;
+        arena:queue ?queue ;
+        arena:tasks rdf:nil ;
+        <newTask> ?task .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?queue ;
+        http:body {
+            ?station arena:tasks _:l .
+
+            _:l rdf:first ?task ;
+                rdf:rest rdf:nil .
+        } .
+} .
+
+{
+    ?station a arena:Workstation ;
+        arena:queue ?queue ;
+        arena:tasks rdf:nil ;
+        <newTask> ?task .
+} => {
+    [] http:mthd httpm:POST ;
+        http:requestURI ?task ;
+        http:body {
+            :transporterTask4 a arena:TransporterTask ;
+                arena:instrument :transporter2 ;
+                arena:toLocationX "34"^^xsd:integer ;
+                arena:toLocationY "11"^^xsd:integer ;
+                arena:input :product6 .
+        } .
+} .

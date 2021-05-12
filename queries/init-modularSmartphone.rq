@@ -1,0 +1,15 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX arena: <http://arena2036.example.org/>
+PREFIX sim: <http://ti.rw.fau.de/sim#>
+
+INSERT {
+    GRAPH ?transporter {
+        ?transporter sim:simulatedLocationX ?locationX ;
+            sim:simulatedLocationY ?locationY .
+    }
+} WHERE {
+    ?transporter a arena:Transporter ;
+        arena:locationX ?locationX ;
+        arena:locationY ?locationY .
+}
