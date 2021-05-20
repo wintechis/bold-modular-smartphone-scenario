@@ -6,3 +6,6 @@ bin/*
 faults.tsv
 interactions.tsv
 dump/*
+node_modules/*
+package-lock.json
+data/simple.trig

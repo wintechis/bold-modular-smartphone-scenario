@@ -196,6 +196,8 @@ DELETE {
         GROUP BY ?task
     }
 
+    FILTER(?capacity >= ?num)
+
     <sim> sim:currentTime [
         time:inXSDDateTimeStamp ?time
     ] .

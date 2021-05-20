@@ -1,0 +1,29 @@
+[{
+    "type": "shopfloor",
+    "x": 50,
+    "y": 50
+}, {
+    "type": "soldering",
+    "x": 15,
+    "y": 7 
+}, {
+    "type": "memoryStorage",
+    "x": 0,
+    "y": 0
+}, {
+    "type": "cpuStorage",
+    "x": 0,
+    "y": 7
+}, {
+    "type": "mainboardStorage",
+    "x": 0,
+    "y": 13
+}, {
+    "type": "fastTransporter",
+    "x": 9,
+    "y": 0
+}, {
+    "type": "slowTransporter",
+    "x": 10,
+    "y": 0
+}]

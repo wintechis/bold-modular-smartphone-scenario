@@ -1,0 +1,244 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix http: <http://www.w3.org/2011/http#> .
+@prefix httpm: <http://www.w3.org/2011/http-methods#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix arena: <http://arena2036.example.org/> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix : <http://127.0.1.1:8080/> .
+
+#Crawling
+{
+    [] http:mthd httpm:GET ;
+        http:requestURI <http://127.0.1.1:8080/> .
+}
+
+{
+    ?recipe a arena:Recipe .
+} => {
+    [] http:mthd httpm:GET ;
+        http:requestURI ?recipe .
+} .
+
+{
+    ?station a arena:Workstation .
+} => {
+    [] http:mthd httpm:GET ;
+        http:requestURI ?station .
+} .
+
+{
+    ?transporter a arena:Transporter .
+} => {
+    [] http:mthd httpm:GET ;
+        http:requestURI ?transporter .
+} .
+
+{
+    ?stationOrTransporter arena:queue ?queue .
+} => {
+    [] http:mthd httpm:GET ;
+        http:requestURI ?queue .
+} .
+
+{
+    ?port arena:products ?product .
+} => {
+    [] http:mthd httpm:GET ;
+        http:requestURI ?product .
+} .
+
+# New CPU Storage Station Task
+{
+    ?cpuStorageStation a arena:Workstation ;
+        arena:queue ?queue ;
+        arena:skills arena:cpuStorage ;
+        arena:tasks rdf:nil .
+
+    ( ?queue "" ) string:uuid ?task .
+
+    ( <http://127.0.1.1:8080/cpu> "product" ) string:uuid ?product .
+} => {
+    ?task <newTaskFor> ?cpuStorageStation ;
+        <forProduct> ?product .
+} .
+
+{
+    ?task <newTaskFor> ?cpuStorageStation ;
+        <forProduct> ?product .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?task ;
+        http:body {
+            ?task a arena:WorkstationTask ;
+                arena:instrument ?cpuStorageStation ;
+                arena:recipe :cpuRecipe ;
+                arena:output ?product .
+        } .
+} .
+
+{
+    ?task <newTaskFor> ?cpuStorageStation .
+
+    ?cpuStorageStation arena:queue ?queue .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?queue ;
+        http:body {
+            ?cpuStorageStation arena:tasks _:l1 .
+
+            _:l1 rdf:first ?task ;
+                rdf:rest rdf:nil .
+        } .
+} .
+
+# ... for Mainboard
+{
+    ?task <newTaskFor> ?mainboardStorageStation .
+
+    ?mainboardStorageStation arena:skills arena:mainboardStorage .
+
+    ( <http://127.0.1.1:8080/mainboard> "product" ) string:uuid ?product .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?task ;
+        http:body {
+            ?task a arena:WorkstationTask ;
+                arena:instrument ?mainboardStorageStation ;
+                arena:recipe :mainboardRecipe ;
+                arena:output ?product .
+        } .
+} .
+
+{
+    ?task <newTaskFor> ?mainboardStorageStation .
+
+    ?mainboardStorageStation arena:queue ?queue .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?queue ;
+        http:body {
+            ?mainboardStorageStation arena:tasks _:l1 .
+
+            _:l1 rdf:first ?task ;
+                rdf:rest rdf:nil .
+        } .
+} .
+
+# ... for RAM
+{
+    ?task <newTaskFor> ?ramStorageStation .
+
+    ?ramStorageStation arena:skills arena:memoryStorage .
+
+    ( <http://127.0.1.1:8080/ram> "product" ) string:uuid ?product .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?task ;
+        http:body {
+            ?task a arena:WorkstationTask ;
+                arena:instrument ?ramStorageStation ;
+                arena:recipe :ramRecipe ;
+                arena:output ?product .
+        } .
+} .
+
+{
+    ?task <newTaskFor> ?ramStorageStation .
+
+    ?ramStorageStation arena:queue ?queue .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?queue ;
+        http:body {
+            ?ramStorageStation arena:tasks _:l1 .
+
+            _:l1 rdf:first ?task ;
+                rdf:rest rdf:nil .
+        } .
+} .
+
+# New Transport Tasks
+{
+    ?station a arena:Workstation ;
+        arena:outputPort ?output .
+
+    ?output arena:products ?product .
+
+    ?product a arena:Product .
+
+    ?transporter a arena:Transporter ;
+        arena:queue ?queue ;
+        arena:tasks rdf:nil .
+
+    ( ?queue "" ) string:uuid ?task1 .
+
+    ( ?queue "" ) string:uuid ?task2 .
+} => {
+    ?task1 <newTaskForTransporter> ?transporter ;
+        <newTaskForProduct> ?product ;
+        <followUpTask> ?task2 .
+} .
+
+{
+    ?task1 <newTaskForTransporter> ?transporter ;
+        <newTaskForProduct> ?product ;
+        <followUpTask> ?task2 .
+
+    ?product arena:locationX ?locationX ;
+        arena:locationY ?locationY .
+
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?task1 ;
+        http:body {
+            ?task1 a arena:TransporterTask ;
+                arena:instrument ?transporter ;
+                arena:toLocationX ?locationX ;
+                arena:toLocationY ?locationY ;
+                arena:input ?product .
+        } .
+} .
+
+{
+    ?task1 <newTaskForTransporter> ?transporter ;
+        <newTaskForProduct> ?product ;
+        <followUpTask> ?task2 .
+
+    ?solderingStation arena:skills arena:soldering ;
+        arena:inputPort ?input .
+
+    ?input arena:locationX ?locationX ;
+        arena:locationY ?locationY .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?task2 ;
+        http:body {
+            ?task2 a arena:TransporterTask ;
+                arena:instrument ?transporter ;
+                arena:toLocationX ?locationX ;
+                arena:toLocationY ?locationY ;
+                arena:output ?product .
+        } .
+} .
+
+{
+    ?task1 <newTaskForTransporter> ?transporter ;
+        <newTaskForProduct> ?product ;
+        <followUpTask> ?task2 .
+
+    ?transporter arena:queue ?queue .
+} => {
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?queue ;
+        http:body {
+            ?transporter arena:tasks _:l1 .
+
+            _:l1 rdf:first ?task1 ;
+                rdf:rest _:l2 .
+
+            _:l2 rdf:first ?task2 ;
+                rdf:rest rdf:nil .
+        } .
+} .

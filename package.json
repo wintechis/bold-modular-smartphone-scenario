@@ -1,0 +1,22 @@
+{
+  "name": "bold-modular-smartphone-scenario-create-scenario",
+  "version": "1.0.0",
+  "description": "Files to run the Modular Smartphone Scenario on the Bold Simulation Server",
+  "main": "createScenario.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wintechis/bold-modular-smartphone-scenario.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wintechis/bold-modular-smartphone-scenario/issues"
+  },
+  "homepage": "https://github.com/wintechis/bold-modular-smartphone-scenario#readme",
+  "dependencies": {
+    "n3": "^1.10.0"
+  }
+}

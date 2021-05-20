@@ -4,4 +4,5 @@
 
 <sim> :initialTime "2020-05-21T08:00:00Z"^^xsd:dateTime ;
       :timeslotDuration 100 ; # in ms (corresponds to simulated time, not real execution time)
-      :iterations 100 .
+      :iterations 100 ;
+      :seed 1234 .

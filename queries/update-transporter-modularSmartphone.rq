@@ -18,8 +18,8 @@ DELETE {
     ?t arena:status arena:idle ;
         arena:tasks ?list .
 
-        ?list rdf:first ?task ;
-            rdf:rest ?rest .
+    ?list rdf:first ?task ;
+        rdf:rest ?rest .
 };
 
 # Switching state from busy to idle if task queue empty
