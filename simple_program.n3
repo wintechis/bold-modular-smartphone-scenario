@@ -49,6 +49,13 @@
         http:requestURI ?product .
 } .
 
+{
+    ?product arena:reservationContainer ?container .
+} => {
+    [] http:mthd httpm:GET ;
+        http:requestURI ?container .
+} .
+
 # New CPU Storage Station Task
 {
     ?cpuStorageStation a arena:Workstation ;
@@ -166,7 +173,8 @@
 
     ?output arena:products ?product .
 
-    ?product a arena:Product .
+    ?product a arena:Product ;
+        arena:reservationContainer ?resContainer .
 
     ?transporter a arena:Transporter ;
         arena:queue ?queue ;
@@ -176,19 +184,28 @@
 
     ( ?queue "" ) string:uuid ?task2 .
 } => {
-    ?task1 <newTaskForTransporter> ?transporter ;
-        <newTaskForProduct> ?product ;
-        <followUpTask> ?task2 .
+    [] http:mthd httpm:PUT ;
+        http:requestURI ?resContainer ;
+        http:body {
+            ?product arena:reservation _:r1 .
+
+            _:r1 <forTransporter> ?transporter ;
+                <firstTask> ?task1 ;
+                <secondTask> ?task2 .
+        } .
 } .
 
 {
-    ?task1 <newTaskForTransporter> ?transporter ;
-        <newTaskForProduct> ?product ;
-        <followUpTask> ?task2 .
+    ?product arena:reservation ?r .
+
+    ?r <forTransporter> ?transporter ;
+        <firstTask> ?task1 ;
+        <secondTask> ?task2 .
 
     ?product arena:locationX ?locationX ;
         arena:locationY ?locationY .
 
+    ?transporter arena:tasks rdf:nil .
 } => {
     [] http:mthd httpm:PUT ;
         http:requestURI ?task1 ;
@@ -202,15 +219,19 @@
 } .
 
 {
-    ?task1 <newTaskForTransporter> ?transporter ;
-        <newTaskForProduct> ?product ;
-        <followUpTask> ?task2 .
+    ?product arena:reservation ?r .
+
+    ?r <forTransporter> ?transporter ;
+        <firstTask> ?task1 ;
+        <secondTask> ?task2 .
 
     ?solderingStation arena:skills arena:soldering ;
         arena:inputPort ?input .
 
     ?input arena:locationX ?locationX ;
         arena:locationY ?locationY .
+
+    ?transporter arena:tasks rdf:nil .
 } => {
     [] http:mthd httpm:PUT ;
         http:requestURI ?task2 ;
@@ -224,11 +245,14 @@
 } .
 
 {
-    ?task1 <newTaskForTransporter> ?transporter ;
-        <newTaskForProduct> ?product ;
-        <followUpTask> ?task2 .
+    ?product arena:reservation ?r .
 
-    ?transporter arena:queue ?queue .
+    ?r <forTransporter> ?transporter ;
+        <firstTask> ?task1 ;
+        <secondTask> ?task2 .
+
+    ?transporter arena:queue ?queue ;
+        arena:tasks rdf:nil .
 } => {
     [] http:mthd httpm:PUT ;
         http:requestURI ?queue ;

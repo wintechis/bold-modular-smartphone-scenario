@@ -1,29 +1,123 @@
 [{
     "type": "shopfloor",
-    "x": 50,
-    "y": 50
+    "x": 37,
+    "y": 22
 }, {
     "type": "soldering",
-    "x": 15,
-    "y": 7 
+    "x": 9,
+    "y": 7,
+    "rotation": 0
+}, {
+    "type": "soldering",
+    "x": 9,
+    "y": 12,
+    "rotation": 0
 }, {
     "type": "memoryStorage",
     "x": 0,
-    "y": 0
+    "y": 0,
+    "rotation": 0
 }, {
     "type": "cpuStorage",
     "x": 0,
-    "y": 7
+    "y": 5,
+    "rotation": 0
 }, {
-    "type": "mainboardStorage",
+    "type": "boardStorage",
     "x": 0,
-    "y": 13
+    "y": 10,
+    "rotation": 0
+}, {
+    "type": "portStorage",
+    "x": 8,
+    "y": 0,
+    "rotation": 90
+}, {
+    "type": "fixing",
+    "x": 16,
+    "y": 3,
+    "rotation": 0
+}, {
+    "type": "metalCasting",
+    "x": 25,
+    "y": 0,
+    "rotation": 180
+}, {
+    "type": "plasticCasting",
+    "x": 25,
+    "y": 3,
+    "rotation": 180
+}, {
+    "type": "metalStorage",
+    "x": 35,
+    "y": 0,
+    "rotation": 180
+}, {
+    "type": "plasticStorage",
+    "x": 35,
+    "y": 3,
+    "rotation": 180
+}, {
+    "type": "bolting",
+    "x": 19,
+    "y": 10,
+    "rotation": 90
+}, {
+    "type": "bolting",
+    "x": 23,
+    "y": 10,
+    "rotation": 90
+}, {
+    "type": "communicationStorage",
+    "x": 0,
+    "y": 15,
+    "rotation": 0
+}, {
+    "type": "sensorStorage",
+    "x": 0,
+    "y": 20,
+    "rotation": 0
+}, {
+    "type": "batteryCellStorage",
+    "x": 34,
+    "y": 7,
+    "rotation": 180
+}, {
+    "type": "combining",
+    "x": 29,
+    "y": 10,
+    "rotation": 90
+}, {
+    "type": "gluing",
+    "x": 14,
+    "y": 16,
+    "rotation": 180
+}, {
+    "type": "gluing",
+    "x": 14,
+    "y": 20,
+    "rotation": 180
+}, {
+    "type": "glasStorage",
+    "x": 35,
+    "y": 16,
+    "rotation": 180
+}, {
+    "type": "lcdStorage",
+    "x": 35,
+    "y": 20,
+    "rotation": 180
+}, {
+    "type": "delivery",
+    "x": 7,
+    "y": 19,
+    "rotation": 270
 }, {
     "type": "fastTransporter",
-    "x": 9,
+    "x": 5,
     "y": 0
 }, {
     "type": "slowTransporter",
-    "x": 10,
+    "x": 4,
     "y": 0
 }]

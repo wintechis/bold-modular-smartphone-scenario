@@ -159,6 +159,7 @@ DELETE {
     GRAPH ?product {
         ?product a arena:Product ;
             arena:kind ?kind ;
+            arena:reservationContainer ?reservations ;
             arena:locationX ?locationX ;
             arena:locationY ?locationY .
     }
@@ -197,6 +198,8 @@ DELETE {
     }
 
     FILTER(?capacity >= ?num)
+
+    BIND(IRI(CONCAT(xsd:string(?product), "-reservations")) AS ?reservations)
 
     <sim> sim:currentTime [
         time:inXSDDateTimeStamp ?time
