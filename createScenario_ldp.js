@@ -127,6 +127,7 @@ scenario.forEach(element => {
             }
             store.addQuads([
                 quad(namedNode('stations'), namedNode(ldp + 'contains'), namedNode('stations/solderingStation' + count['soldering']), namedNode('stations')),
+                quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(rdf + 'type'), namedNode(ldp + 'BasicContainer'), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(rdf + 'type'), namedNode(arena + 'Workstation'), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'locationX1'), literal(element['x']), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'locationY1'), literal(element['y']), namedNode('stations/solderingStation' + count['soldering'])),
@@ -135,7 +136,6 @@ scenario.forEach(element => {
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'skills'), namedNode(arena + 'soldering'), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'queue'), namedNode('stations/solderingStation' + count['soldering'] + 'TaskQueue'), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'affordances'), namedNode('stations/solderingStation' + count['soldering'] + 'Affordances'), namedNode('stations/solderingStation' + count['soldering'])),
-                quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'recipe'), namedNode('mainModuleRecipe'), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'inputPort'), blankNode('soldering' + count['soldering'] + 'input'), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(blankNode('soldering' + count['soldering'] + 'input'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/solderingStation' + count['soldering'])),
@@ -148,6 +148,14 @@ scenario.forEach(element => {
                 quad(blankNode('soldering' + count['soldering'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(blankNode('soldering' + count['soldering'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/solderingStation' + count['soldering'] + 'TaskQueue')),
+                // Indirect Container for properties, esp. recipe
+                quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(ldp + 'contains'), namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode('stations/solderingStation' + count['soldering'])),
+                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode(rdf + 'type'), namedNode(ldp + 'IndirectContainer'), namedNode('stations/solderingStation' + count['soldering'] + '/properties')),
+                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode(ldp + 'membershipResource'), namedNode('stations/solderingStation' + count['soldering']), namedNode('stations/solderingStation' + count['soldering'] + '/properties')),
+                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode(ldp + 'hasMemberRelation'), namedNode(arena + 'recipe'), namedNode('stations/solderingStation' + count['soldering'] + '/properties')),
+                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode(ldp + 'insertedContentRelation'), namedNode(rdf + 'value'), namedNode('stations/solderingStation' + count['soldering'] + '/properties')),
+                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode(ldp + 'contains'), namedNode('stations/solderingStation' + count['soldering'] + '/properties/recipe'), namedNode('stations/solderingStation' + count['soldering'] + '/properties')),
+                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties/recipe'), namedNode(rdf + 'value'), namedNode('recipes/mainModuleRecipe'), namedNode('stations/solderingStation' + count['soldering'] + '/properties/recipe')),
             ])
             count['soldering'] += 1
             break
