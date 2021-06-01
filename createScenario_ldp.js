@@ -134,8 +134,6 @@ scenario.forEach(element => {
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'skills'), namedNode(arena + 'soldering'), namedNode('stations/solderingStation' + count['soldering'])),
-                quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'queue'), namedNode('stations/solderingStation' + count['soldering'] + 'TaskQueue'), namedNode('stations/solderingStation' + count['soldering'])),
-                quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'affordances'), namedNode('stations/solderingStation' + count['soldering'] + 'Affordances'), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'inputPort'), blankNode('soldering' + count['soldering'] + 'input'), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(blankNode('soldering' + count['soldering'] + 'input'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/solderingStation' + count['soldering'])),
@@ -147,28 +145,8 @@ scenario.forEach(element => {
                 quad(blankNode('soldering' + count['soldering'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(blankNode('soldering' + count['soldering'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/solderingStation' + count['soldering'])),
                 quad(blankNode('soldering' + count['soldering'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/solderingStation' + count['soldering'])),
-                quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/solderingStation' + count['soldering'] + 'TaskQueue')),
-                // Indirect Container for properties, esp. recipe
-                quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(ldp + 'contains'), namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode('stations/solderingStation' + count['soldering'])),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode(rdf + 'type'), namedNode(ldp + 'IndirectContainer'), namedNode('stations/solderingStation' + count['soldering'] + '/properties')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode(ldp + 'membershipResource'), namedNode('stations/solderingStation' + count['soldering']), namedNode('stations/solderingStation' + count['soldering'] + '/properties')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode(ldp + 'hasMemberRelation'), namedNode(arena + 'recipe'), namedNode('stations/solderingStation' + count['soldering'] + '/properties')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode(ldp + 'insertedContentRelation'), namedNode(rdf + 'value'), namedNode('stations/solderingStation' + count['soldering'] + '/properties')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties'), namedNode(ldp + 'contains'), namedNode('stations/solderingStation' + count['soldering'] + '/properties/recipe'), namedNode('stations/solderingStation' + count['soldering'] + '/properties')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/properties/recipe'), namedNode(rdf + 'value'), namedNode('recipes/mainModuleRecipe'), namedNode('stations/solderingStation' + count['soldering'] + '/properties/recipe')),
-                // Ordered Container for task queue
-                quad(namedNode('stations/solderingStation' + count['soldering']), namedNode(ldp + 'contains'), namedNode('stations/solderingStation' + count['soldering'] + '/tasks'), namedNode('stations/solderingStation' + count['soldering'])),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/tasks'), namedNode(rdf + 'type'), namedNode(ldp + 'OrderedContainer'), namedNode('stations/solderingStation' + count['soldering'] + '/tasks')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/tasks'), namedNode(ldp + 'membershipResource'), namedNode('stations/solderingStation' + count['soldering']), namedNode('stations/solderingStation' + count['soldering'] + '/tasks')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/tasks'), namedNode(ldp + 'hasMemberRelation'), namedNode(arena + 'activeTask'), namedNode('stations/solderingStation' + count['soldering'] + '/tasks')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/tasks'), namedNode(ldp + 'orderContentRelation'), namedNode(arena + 'queuePosition'), namedNode('stations/solderingStation' + count['soldering'] + '/tasks')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/tasks'), namedNode(ldp + 'contains'), namedNode('stations/solderingStation' + count['soldering'] + '/tasks/1'), namedNode('stations/solderingStation' + count['soldering'] + '/tasks')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/tasks/1'), namedNode(rdf + 'type'), namedNode(arena + 'WorkstationTask'), namedNode('stations/solderingStation' + count['soldering'] + '/tasks/1')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/tasks/1'), namedNode(arena + 'queuePosition'), literal(10), namedNode('stations/solderingStation' + count['soldering'] + '/tasks/1')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/tasks'), namedNode(ldp + 'contains'), namedNode('stations/solderingStation' + count['soldering'] + '/tasks/2'), namedNode('stations/solderingStation' + count['soldering'] + '/tasks')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/tasks/2'), namedNode(rdf + 'type'), namedNode(arena + 'WorkstationTask'), namedNode('stations/solderingStation' + count['soldering'] + '/tasks/2')),
-                quad(namedNode('stations/solderingStation' + count['soldering'] + '/tasks/2'), namedNode(arena + 'queuePosition'), literal(7), namedNode('stations/solderingStation' + count['soldering'] + '/tasks/2')),
             ])
+            store.addQuads(getStationContainerQuads('stations/solderingStation', 'soldering', 'mainModuleRecipe'))
             count['soldering'] += 1
             break
         }
@@ -201,17 +179,14 @@ scenario.forEach(element => {
                 quad(namedNode('stations/memoryStorageStation' + count['memoryStorage']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
                 quad(namedNode('stations/memoryStorageStation' + count['memoryStorage']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
                 quad(namedNode('stations/memoryStorageStation' + count['memoryStorage']), namedNode(arena + 'skills'), namedNode(arena + 'memoryStorage'), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
-                quad(namedNode('stations/memoryStorageStation' + count['memoryStorage']), namedNode(arena + 'queue'), namedNode('stations/memoryStorageStation' + count['memoryStorage'] + 'TaskQueue'), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
-                quad(namedNode('stations/memoryStorageStation' + count['memoryStorage']), namedNode(arena + 'affordances'), namedNode('stations/memoryStorageStation' + count['memoryStorage'] + 'Affordances'), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
-                quad(namedNode('stations/memoryStorageStation' + count['memoryStorage']), namedNode(arena + 'recipe'), namedNode('ramRecipe'), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
                 quad(namedNode('stations/memoryStorageStation' + count['memoryStorage']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
                 quad(namedNode('stations/memoryStorageStation' + count['memoryStorage']), namedNode(arena + 'outputPort'), blankNode('memoryStorage' + count['memoryStorage'] + 'output'), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
                 quad(blankNode('memoryStorage' + count['memoryStorage'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
                 quad(blankNode('memoryStorage' + count['memoryStorage'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
                 quad(blankNode('memoryStorage' + count['memoryStorage'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
                 quad(blankNode('memoryStorage' + count['memoryStorage'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/memoryStorageStation' + count['memoryStorage'])),
-                quad(namedNode('stations/memoryStorageStation' + count['memoryStorage']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/memoryStorageStation' + count['memoryStorage'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/memoryStorageStation', 'memoryStorage', 'ramRecipe'))
             count['memoryStorage'] += 1
             break
         }
@@ -244,17 +219,14 @@ scenario.forEach(element => {
                 quad(namedNode('stations/cpuStorageStation' + count['cpuStorage']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
                 quad(namedNode('stations/cpuStorageStation' + count['cpuStorage']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
                 quad(namedNode('stations/cpuStorageStation' + count['cpuStorage']), namedNode(arena + 'skills'), namedNode(arena + 'cpuStorage'), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
-                quad(namedNode('stations/cpuStorageStation' + count['cpuStorage']), namedNode(arena + 'queue'), namedNode('stations/cpuStorageStation' + count['cpuStorage'] + 'TaskQueue'), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
-                quad(namedNode('stations/cpuStorageStation' + count['cpuStorage']), namedNode(arena + 'affordances'), namedNode('stations/cpuStorageStation' + count['cpuStorage'] + 'Affordances'), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
-                quad(namedNode('stations/cpuStorageStation' + count['cpuStorage']), namedNode(arena + 'recipe'), namedNode('cpuRecipe'), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
                 quad(namedNode('stations/cpuStorageStation' + count['cpuStorage']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
                 quad(namedNode('stations/cpuStorageStation' + count['cpuStorage']), namedNode(arena + 'outputPort'), blankNode('cpuStorage' + count['cpuStorage'] + 'output'), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
                 quad(blankNode('cpuStorage' + count['cpuStorage'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
                 quad(blankNode('cpuStorage' + count['cpuStorage'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
                 quad(blankNode('cpuStorage' + count['cpuStorage'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
                 quad(blankNode('cpuStorage' + count['cpuStorage'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/cpuStorageStation' + count['cpuStorage'])),
-                quad(namedNode('stations/cpuStorageStation' + count['cpuStorage']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/cpuStorageStation' + count['cpuStorage'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/cpuStorageStation', 'cpuStorage', 'cpuRecipe'))
             count['cpuStorage'] += 1
             break
         }
@@ -287,17 +259,14 @@ scenario.forEach(element => {
                 quad(namedNode('stations/boardStorageStation' + count['boardStorage']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/boardStorageStation' + count['boardStorage'])),
                 quad(namedNode('stations/boardStorageStation' + count['boardStorage']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/boardStorageStation' + count['boardStorage'])),
                 quad(namedNode('stations/boardStorageStation' + count['boardStorage']), namedNode(arena + 'skills'), namedNode(arena + 'boardStorage'), namedNode('stations/boardStorageStation' + count['boardStorage'])),
-                quad(namedNode('stations/boardStorageStation' + count['boardStorage']), namedNode(arena + 'queue'), namedNode('stations/boardStorageStation' + count['boardStorage'] + 'TaskQueue'), namedNode('stations/boardStorageStation' + count['boardStorage'])),
-                quad(namedNode('stations/boardStorageStation' + count['boardStorage']), namedNode(arena + 'affordances'), namedNode('stations/boardStorageStation' + count['boardStorage'] + 'Affordances'), namedNode('stations/boardStorageStation' + count['boardStorage'])),
-                quad(namedNode('stations/boardStorageStation' + count['boardStorage']), namedNode(arena + 'recipe'), namedNode('mainboardRecipe'), namedNode('stations/boardStorageStation' + count['boardStorage'])),
                 quad(namedNode('stations/boardStorageStation' + count['boardStorage']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/boardStorageStation' + count['boardStorage'])),
                 quad(namedNode('stations/boardStorageStation' + count['boardStorage']), namedNode(arena + 'outputPort'), blankNode('boardStorage' + count['boardStorage'] + 'output'), namedNode('stations/boardStorageStation' + count['boardStorage'])),
                 quad(blankNode('boardStorage' + count['boardStorage'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/boardStorageStation' + count['boardStorage'])),
                 quad(blankNode('boardStorage' + count['boardStorage'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/boardStorageStation' + count['boardStorage'])),
                 quad(blankNode('boardStorage' + count['boardStorage'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/boardStorageStation' + count['boardStorage'])),
                 quad(blankNode('boardStorage' + count['boardStorage'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/boardStorageStation' + count['boardStorage'])),
-                quad(namedNode('stations/boardStorageStation' + count['boardStorage']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/boardStorageStation' + count['boardStorage'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/boardStorageStation', 'boardStorage', 'mainboardRecipe'))
             count['boardStorage'] += 1
             break
         }
@@ -332,28 +301,25 @@ scenario.forEach(element => {
             }
             store.addQuads([
                 quad(namedNode('stations'), namedNode(ldp + 'contains'), namedNode('stations/fixingStation' + count['fixing']), namedNode('stations')),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(rdf + 'type'), namedNode(arena + 'Workstation'), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'locationX1'), literal(element['x']), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'locationY1'), literal(element['y']), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'locationX2'), literal(x2), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'locationY2'), literal(y2), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'skills'), namedNode(arena + 'fixing'), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'queue'), namedNode('fixingStation' + count['fixing'] + 'TaskQueue'), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'affordances'), namedNode('fixingStation' + count['fixing'] + 'Affordances'), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'recipe'), namedNode('mainModuleWithPortsRecipe'), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'inputPort'), blankNode('fixing' + count['fixing'] + 'input'), namedNode('fixingStation' + count['fixing'])),
-                quad(blankNode('fixing' + count['fixing'] + 'input'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('fixingStation' + count['fixing'])),
-                quad(blankNode('fixing' + count['fixing'] + 'input'), namedNode(arena + 'locationX'), literal(inputX), namedNode('fixingStation' + count['fixing'])),
-                quad(blankNode('fixing' + count['fixing'] + 'input'), namedNode(arena + 'locationY'), literal(inputY), namedNode('fixingStation' + count['fixing'])),
-                quad(blankNode('fixing' + count['fixing'] + 'input'), namedNode(arena + 'capacity'), literal(5), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'outputPort'), blankNode('fixing' + count['fixing'] + 'output'), namedNode('fixingStation' + count['fixing'])),
-                quad(blankNode('fixing' + count['fixing'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('fixingStation' + count['fixing'])),
-                quad(blankNode('fixing' + count['fixing'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('fixingStation' + count['fixing'])),
-                quad(blankNode('fixing' + count['fixing'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('fixingStation' + count['fixing'])),
-                quad(blankNode('fixing' + count['fixing'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('fixingStation' + count['fixing'])),
-                quad(namedNode('fixingStation' + count['fixing']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('fixingStation' + count['fixing'] + 'TaskQueue')),
+                quad(namedNode('stations/fixingStation' + count['fixing']), namedNode(rdf + 'type'), namedNode(arena + 'Workstation'), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(namedNode('stations/fixingStation' + count['fixing']), namedNode(arena + 'locationX1'), literal(element['x']), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(namedNode('stations/fixingStation' + count['fixing']), namedNode(arena + 'locationY1'), literal(element['y']), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(namedNode('stations/fixingStation' + count['fixing']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(namedNode('stations/fixingStation' + count['fixing']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(namedNode('stations/fixingStation' + count['fixing']), namedNode(arena + 'skills'), namedNode(arena + 'fixing'), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(namedNode('stations/fixingStation' + count['fixing']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(namedNode('stations/fixingStation' + count['fixing']), namedNode(arena + 'inputPort'), blankNode('fixing' + count['fixing'] + 'input'), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(blankNode('fixing' + count['fixing'] + 'input'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(blankNode('fixing' + count['fixing'] + 'input'), namedNode(arena + 'locationX'), literal(inputX), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(blankNode('fixing' + count['fixing'] + 'input'), namedNode(arena + 'locationY'), literal(inputY), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(blankNode('fixing' + count['fixing'] + 'input'), namedNode(arena + 'capacity'), literal(5), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(namedNode('stations/fixingStation' + count['fixing']), namedNode(arena + 'outputPort'), blankNode('fixing' + count['fixing'] + 'output'), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(blankNode('fixing' + count['fixing'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(blankNode('fixing' + count['fixing'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(blankNode('fixing' + count['fixing'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/fixingStation' + count['fixing'])),
+                quad(blankNode('fixing' + count['fixing'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/fixingStation' + count['fixing'])),
             ])
+            store.addQuads(getStationContainerQuads('stations/fixingStation', 'fixing', 'mainModuleWithPortsRecipe'))
             count['fixing'] += 1
             break
         }
@@ -386,17 +352,14 @@ scenario.forEach(element => {
                 quad(namedNode('stations/portStorageStation' + count['portStorage']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/portStorageStation' + count['portStorage'])),
                 quad(namedNode('stations/portStorageStation' + count['portStorage']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/portStorageStation' + count['portStorage'])),
                 quad(namedNode('stations/portStorageStation' + count['portStorage']), namedNode(arena + 'skills'), namedNode(arena + 'portStorage'), namedNode('stations/portStorageStation' + count['portStorage'])),
-                quad(namedNode('stations/portStorageStation' + count['portStorage']), namedNode(arena + 'queue'), namedNode('stations/portStorageStation' + count['portStorage'] + 'TaskQueue'), namedNode('stations/portStorageStation' + count['portStorage'])),
-                quad(namedNode('stations/portStorageStation' + count['portStorage']), namedNode(arena + 'affordances'), namedNode('stations/portStorageStation' + count['portStorage'] + 'Affordances'), namedNode('stations/portStorageStation' + count['portStorage'])),
-                quad(namedNode('stations/portStorageStation' + count['portStorage']), namedNode(arena + 'recipe'), namedNode('microUSBRecipe'), namedNode('stations/portStorageStation' + count['portStorage'])),
                 quad(namedNode('stations/portStorageStation' + count['portStorage']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/portStorageStation' + count['portStorage'])),
                 quad(namedNode('stations/portStorageStation' + count['portStorage']), namedNode(arena + 'outputPort'), blankNode('portStorage' + count['portStorage'] + 'output'), namedNode('stations/portStorageStation' + count['portStorage'])),
                 quad(blankNode('portStorage' + count['portStorage'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/portStorageStation' + count['portStorage'])),
                 quad(blankNode('portStorage' + count['portStorage'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/portStorageStation' + count['portStorage'])),
                 quad(blankNode('portStorage' + count['portStorage'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/portStorageStation' + count['portStorage'])),
                 quad(blankNode('portStorage' + count['portStorage'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/portStorageStation' + count['portStorage'])),
-                quad(namedNode('stations/portStorageStation' + count['portStorage']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/portStorageStation' + count['portStorage'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/portStorageStation', 'portStorage', 'microUSBRecipe'))
             count['portStorage'] += 1
             break
         }
@@ -437,9 +400,6 @@ scenario.forEach(element => {
                 quad(namedNode('stations/metalCastingStation' + count['metalCasting']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/metalCastingStation' + count['metalCasting'])),
                 quad(namedNode('stations/metalCastingStation' + count['metalCasting']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/metalCastingStation' + count['metalCasting'])),
                 quad(namedNode('stations/metalCastingStation' + count['metalCasting']), namedNode(arena + 'skills'), namedNode(arena + 'metalCasting'), namedNode('stations/metalCastingStation' + count['metalCasting'])),
-                quad(namedNode('stations/metalCastingStation' + count['metalCasting']), namedNode(arena + 'queue'), namedNode('stations/metalCastingStation' + count['metalCasting'] + 'TaskQueue'), namedNode('stations/metalCastingStation' + count['metalCasting'])),
-                quad(namedNode('stations/metalCastingStation' + count['metalCasting']), namedNode(arena + 'affordances'), namedNode('stations/metalCastingStation' + count['metalCasting'] + 'Affordances'), namedNode('stations/metalCastingStation' + count['metalCasting'])),
-                quad(namedNode('stations/metalCastingStation' + count['metalCasting']), namedNode(arena + 'recipe'), namedNode('metalCaseRecipe'), namedNode('stations/metalCastingStation' + count['metalCasting'])),
                 quad(namedNode('stations/metalCastingStation' + count['metalCasting']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/metalCastingStation' + count['metalCasting'])),
                 quad(namedNode('stations/metalCastingStation' + count['metalCasting']), namedNode(arena + 'inputPort'), blankNode('metalCasting' + count['metalCasting'] + 'input'), namedNode('stations/metalCastingStation' + count['metalCasting'])),
                 quad(blankNode('metalCasting' + count['metalCasting'] + 'input'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/metalCastingStation' + count['metalCasting'])),
@@ -451,8 +411,8 @@ scenario.forEach(element => {
                 quad(blankNode('metalCasting' + count['metalCasting'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/metalCastingStation' + count['metalCasting'])),
                 quad(blankNode('metalCasting' + count['metalCasting'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/metalCastingStation' + count['metalCasting'])),
                 quad(blankNode('metalCasting' + count['metalCasting'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/metalCastingStation' + count['metalCasting'])),
-                quad(namedNode('stations/metalCastingStation' + count['metalCasting']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/metalCastingStation' + count['metalCasting'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/metalCastingStation', 'metalCasting', 'metalCaseRecipe'))
             count['metalCasting'] += 1
             break
         }
@@ -493,9 +453,6 @@ scenario.forEach(element => {
                 quad(namedNode('stations/plasticCastingStation' + count['plasticCasting']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
                 quad(namedNode('stations/plasticCastingStation' + count['plasticCasting']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
                 quad(namedNode('stations/plasticCastingStation' + count['plasticCasting']), namedNode(arena + 'skills'), namedNode(arena + 'plasticCasting'), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
-                quad(namedNode('stations/plasticCastingStation' + count['plasticCasting']), namedNode(arena + 'queue'), namedNode('stations/plasticCastingStation' + count['plasticCasting'] + 'TaskQueue'), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
-                quad(namedNode('stations/plasticCastingStation' + count['plasticCasting']), namedNode(arena + 'affordances'), namedNode('stations/plasticCastingStation' + count['plasticCasting'] + 'Affordances'), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
-                quad(namedNode('stations/plasticCastingStation' + count['plasticCasting']), namedNode(arena + 'recipe'), namedNode('plasticCaseRecipe'), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
                 quad(namedNode('stations/plasticCastingStation' + count['plasticCasting']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
                 quad(namedNode('stations/plasticCastingStation' + count['plasticCasting']), namedNode(arena + 'inputPort'), blankNode('plasticCasting' + count['plasticCasting'] + 'input'), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
                 quad(blankNode('plasticCasting' + count['plasticCasting'] + 'input'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
@@ -507,8 +464,8 @@ scenario.forEach(element => {
                 quad(blankNode('plasticCasting' + count['plasticCasting'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
                 quad(blankNode('plasticCasting' + count['plasticCasting'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
                 quad(blankNode('plasticCasting' + count['plasticCasting'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/plasticCastingStation' + count['plasticCasting'])),
-                quad(namedNode('stations/plasticCastingStation' + count['plasticCasting']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/plasticCastingStation' + count['plasticCasting'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/plasticCastingStation', 'plasticCasting', 'plasticCaseRecipe'))
             count['plasticCasting'] += 1
             break
         }
@@ -541,17 +498,14 @@ scenario.forEach(element => {
                 quad(namedNode('stations/metalStorageStation' + count['metalStorage']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/metalStorageStation' + count['metalStorage'])),
                 quad(namedNode('stations/metalStorageStation' + count['metalStorage']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/metalStorageStation' + count['metalStorage'])),
                 quad(namedNode('stations/metalStorageStation' + count['metalStorage']), namedNode(arena + 'skills'), namedNode(arena + 'metalStorage'), namedNode('stations/metalStorageStation' + count['metalStorage'])),
-                quad(namedNode('stations/metalStorageStation' + count['metalStorage']), namedNode(arena + 'queue'), namedNode('stations/metalStorageStation' + count['metalStorage'] + 'TaskQueue'), namedNode('stations/metalStorageStation' + count['metalStorage'])),
-                quad(namedNode('stations/metalStorageStation' + count['metalStorage']), namedNode(arena + 'affordances'), namedNode('stations/metalStorageStation' + count['metalStorage'] + 'Affordances'), namedNode('stations/metalStorageStation' + count['metalStorage'])),
-                quad(namedNode('stations/metalStorageStation' + count['metalStorage']), namedNode(arena + 'recipe'), namedNode('metalRecipe'), namedNode('stations/metalStorageStation' + count['metalStorage'])),
                 quad(namedNode('stations/metalStorageStation' + count['metalStorage']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/metalStorageStation' + count['metalStorage'])),
                 quad(namedNode('stations/metalStorageStation' + count['metalStorage']), namedNode(arena + 'outputPort'), blankNode('metalStorage' + count['metalStorage'] + 'output'), namedNode('stations/metalStorageStation' + count['metalStorage'])),
                 quad(blankNode('metalStorage' + count['metalStorage'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/metalStorageStation' + count['metalStorage'])),
                 quad(blankNode('metalStorage' + count['metalStorage'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/metalStorageStation' + count['metalStorage'])),
                 quad(blankNode('metalStorage' + count['metalStorage'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/metalStorageStation' + count['metalStorage'])),
                 quad(blankNode('metalStorage' + count['metalStorage'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/metalStorageStation' + count['metalStorage'])),
-                quad(namedNode('stations/metalStorageStation' + count['metalStorage']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/metalStorageStation' + count['metalStorage'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/metalStorageStation', 'metalStorage', 'metalRecipe'))
             count['metalStorage'] += 1
             break
         }
@@ -584,17 +538,14 @@ scenario.forEach(element => {
                 quad(namedNode('stations/plasticStorageStation' + count['plasticStorage']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
                 quad(namedNode('stations/plasticStorageStation' + count['plasticStorage']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
                 quad(namedNode('stations/plasticStorageStation' + count['plasticStorage']), namedNode(arena + 'skills'), namedNode(arena + 'plasticStorage'), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
-                quad(namedNode('stations/plasticStorageStation' + count['plasticStorage']), namedNode(arena + 'queue'), namedNode('stations/plasticStorageStation' + count['plasticStorage'] + 'TaskQueue'), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
-                quad(namedNode('stations/plasticStorageStation' + count['plasticStorage']), namedNode(arena + 'affordances'), namedNode('stations/plasticStorageStation' + count['plasticStorage'] + 'Affordances'), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
-                quad(namedNode('stations/plasticStorageStation' + count['plasticStorage']), namedNode(arena + 'recipe'), namedNode('plasticRecipe'), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
                 quad(namedNode('stations/plasticStorageStation' + count['plasticStorage']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
                 quad(namedNode('stations/plasticStorageStation' + count['plasticStorage']), namedNode(arena + 'outputPort'), blankNode('plasticStorage' + count['plasticStorage'] + 'output'), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
                 quad(blankNode('plasticStorage' + count['plasticStorage'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
                 quad(blankNode('plasticStorage' + count['plasticStorage'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
                 quad(blankNode('plasticStorage' + count['plasticStorage'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
                 quad(blankNode('plasticStorage' + count['plasticStorage'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/plasticStorageStation' + count['plasticStorage'])),
-                quad(namedNode('stations/plasticStorageStation' + count['plasticStorage']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/plasticStorageStation' + count['plasticStorage'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/plasticStorageStation', 'plasticStorage', 'plasticRecipe'))
             count['plasticStorage'] += 1
             break
         }
@@ -635,9 +586,6 @@ scenario.forEach(element => {
                 quad(namedNode('stations/boltingStation' + count['bolting']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/boltingStation' + count['bolting'])),
                 quad(namedNode('stations/boltingStation' + count['bolting']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/boltingStation' + count['bolting'])),
                 quad(namedNode('stations/boltingStation' + count['bolting']), namedNode(arena + 'skills'), namedNode(arena + 'bolting'), namedNode('stations/boltingStation' + count['bolting'])),
-                quad(namedNode('stations/boltingStation' + count['bolting']), namedNode(arena + 'queue'), namedNode('stations/boltingStation' + count['bolting'] + 'TaskQueue'), namedNode('stations/boltingStation' + count['bolting'])),
-                quad(namedNode('stations/boltingStation' + count['bolting']), namedNode(arena + 'affordances'), namedNode('stations/boltingStation' + count['bolting'] + 'Affordances'), namedNode('stations/boltingStation' + count['bolting'])),
-                quad(namedNode('stations/boltingStation' + count['bolting']), namedNode(arena + 'recipe'), namedNode('caseWithMainModuleRecipe'), namedNode('stations/boltingStation' + count['bolting'])),
                 quad(namedNode('stations/boltingStation' + count['bolting']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/boltingStation' + count['bolting'])),
                 quad(namedNode('stations/boltingStation' + count['bolting']), namedNode(arena + 'inputPort'), blankNode('bolting' + count['bolting'] + 'input'), namedNode('stations/boltingStation' + count['bolting'])),
                 quad(blankNode('bolting' + count['bolting'] + 'input'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/boltingStation' + count['bolting'])),
@@ -649,8 +597,8 @@ scenario.forEach(element => {
                 quad(blankNode('bolting' + count['bolting'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/boltingStation' + count['bolting'])),
                 quad(blankNode('bolting' + count['bolting'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/boltingStation' + count['bolting'])),
                 quad(blankNode('bolting' + count['bolting'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/boltingStation' + count['bolting'])),
-                quad(namedNode('stations/boltingStation' + count['bolting']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/boltingStation' + count['bolting'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/boltingStation', 'bolting', 'caseWithMainModuleRecipe'))
             count['bolting'] += 1
             break
         }
@@ -694,6 +642,7 @@ scenario.forEach(element => {
                 quad(blankNode('communicationStorage' + count['communicationStorage'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/communicationStorageStation' + count['communicationStorage'])),
                 quad(namedNode('stations/communicationStorageStation' + count['communicationStorage']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/communicationStorageStation' + count['communicationStorage'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/communicationStorageStation', 'communicationStorage', 'wifiRecipe'))
             count['communicationStorage'] += 1
             break
         }
@@ -726,17 +675,14 @@ scenario.forEach(element => {
                 quad(namedNode('stations/sensorStorageStation' + count['sensorStorage']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
                 quad(namedNode('stations/sensorStorageStation' + count['sensorStorage']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
                 quad(namedNode('stations/sensorStorageStation' + count['sensorStorage']), namedNode(arena + 'skills'), namedNode(arena + 'sensorStorage'), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
-                quad(namedNode('stations/sensorStorageStation' + count['sensorStorage']), namedNode(arena + 'queue'), namedNode('stations/sensorStorageStation' + count['sensorStorage'] + 'TaskQueue'), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
-                quad(namedNode('stations/sensorStorageStation' + count['sensorStorage']), namedNode(arena + 'affordances'), namedNode('stations/sensorStorageStation' + count['sensorStorage'] + 'Affordances'), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
-                quad(namedNode('stations/sensorStorageStation' + count['sensorStorage']), namedNode(arena + 'recipe'), namedNode('cameraRecipe'), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
                 quad(namedNode('stations/sensorStorageStation' + count['sensorStorage']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
                 quad(namedNode('stations/sensorStorageStation' + count['sensorStorage']), namedNode(arena + 'outputPort'), blankNode('sensorStorage' + count['sensorStorage'] + 'output'), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
                 quad(blankNode('sensorStorage' + count['sensorStorage'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
                 quad(blankNode('sensorStorage' + count['sensorStorage'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
                 quad(blankNode('sensorStorage' + count['sensorStorage'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
                 quad(blankNode('sensorStorage' + count['sensorStorage'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/sensorStorageStation' + count['sensorStorage'])),
-                quad(namedNode('stations/sensorStorageStation' + count['sensorStorage']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/sensorStorageStation' + count['sensorStorage'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/sensorStorageStation', 'sensorStorage', 'cameraRecipe'))
             count['sensorStorage'] += 1
             break
         }
@@ -769,17 +715,14 @@ scenario.forEach(element => {
                 quad(namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
                 quad(namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
                 quad(namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage']), namedNode(arena + 'skills'), namedNode(arena + 'batteryCellStorage'), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
-                quad(namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage']), namedNode(arena + 'queue'), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'] + 'TaskQueue'), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
-                quad(namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage']), namedNode(arena + 'affordances'), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'] + 'Affordances'), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
-                quad(namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage']), namedNode(arena + 'recipe'), namedNode('batteryCellRecipe'), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
                 quad(namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
                 quad(namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage']), namedNode(arena + 'outputPort'), blankNode('batteryCellStorage' + count['batteryCellStorage'] + 'output'), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
                 quad(blankNode('batteryCellStorage' + count['batteryCellStorage'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
                 quad(blankNode('batteryCellStorage' + count['batteryCellStorage'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
                 quad(blankNode('batteryCellStorage' + count['batteryCellStorage'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
                 quad(blankNode('batteryCellStorage' + count['batteryCellStorage'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'])),
-                quad(namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/batteryCellStorageStation' + count['batteryCellStorage'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/batteryCellStorageStation', 'batteryCellStorage', 'batteryCellRecipe'))
             count['batteryCellStorage'] += 1
             break
         }
@@ -820,9 +763,6 @@ scenario.forEach(element => {
                 quad(namedNode('stations/combiningStation' + count['combining']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/combiningStation' + count['combining'])),
                 quad(namedNode('stations/combiningStation' + count['combining']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/combiningStation' + count['combining'])),
                 quad(namedNode('stations/combiningStation' + count['combining']), namedNode(arena + 'skills'), namedNode(arena + 'combining'), namedNode('stations/combiningStation' + count['combining'])),
-                quad(namedNode('stations/combiningStation' + count['combining']), namedNode(arena + 'queue'), namedNode('stations/combiningStation' + count['combining'] + 'TaskQueue'), namedNode('stations/combiningStation' + count['combining'])),
-                quad(namedNode('stations/combiningStation' + count['combining']), namedNode(arena + 'affordances'), namedNode('stations/combiningStation' + count['combining'] + 'Affordances'), namedNode('stations/combiningStation' + count['combining'])),
-                quad(namedNode('stations/combiningStation' + count['combining']), namedNode(arena + 'recipe'), namedNode('batteryRecipe'), namedNode('stations/combiningStation' + count['combining'])),
                 quad(namedNode('stations/combiningStation' + count['combining']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/combiningStation' + count['combining'])),
                 quad(namedNode('stations/combiningStation' + count['combining']), namedNode(arena + 'inputPort'), blankNode('combining' + count['combining'] + 'input'), namedNode('stations/combiningStation' + count['combining'])),
                 quad(blankNode('combining' + count['combining'] + 'input'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/combiningStation' + count['combining'])),
@@ -834,8 +774,8 @@ scenario.forEach(element => {
                 quad(blankNode('combining' + count['combining'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/combiningStation' + count['combining'])),
                 quad(blankNode('combining' + count['combining'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/combiningStation' + count['combining'])),
                 quad(blankNode('combining' + count['combining'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/combiningStation' + count['combining'])),
-                quad(namedNode('stations/combiningStation' + count['combining']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/combiningStation' + count['combining'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/combiningStation', 'combining', 'batteryRecipe'))
             count['combining'] += 1
             break
         }
@@ -876,9 +816,6 @@ scenario.forEach(element => {
                 quad(namedNode('gluingStation' + count['gluing']), namedNode(arena + 'locationX2'), literal(x2), namedNode('gluingStation' + count['gluing'])),
                 quad(namedNode('gluingStation' + count['gluing']), namedNode(arena + 'locationY2'), literal(y2), namedNode('gluingStation' + count['gluing'])),
                 quad(namedNode('gluingStation' + count['gluing']), namedNode(arena + 'skills'), namedNode(arena + 'gluing'), namedNode('gluingStation' + count['gluing'])),
-                quad(namedNode('gluingStation' + count['gluing']), namedNode(arena + 'queue'), namedNode('gluingStation' + count['gluing'] + 'TaskQueue'), namedNode('gluingStation' + count['gluing'])),
-                quad(namedNode('gluingStation' + count['gluing']), namedNode(arena + 'affordances'), namedNode('gluingStation' + count['gluing'] + 'Affordances'), namedNode('gluingStation' + count['gluing'])),
-                quad(namedNode('gluingStation' + count['gluing']), namedNode(arena + 'recipe'), namedNode('smartphoneRecipe'), namedNode('gluingStation' + count['gluing'])),
                 quad(namedNode('gluingStation' + count['gluing']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('gluingStation' + count['gluing'])),
                 quad(namedNode('gluingStation' + count['gluing']), namedNode(arena + 'inputPort'), blankNode('gluing' + count['gluing'] + 'input'), namedNode('gluingStation' + count['gluing'])),
                 quad(blankNode('gluing' + count['gluing'] + 'input'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('gluingStation' + count['gluing'])),
@@ -890,8 +827,8 @@ scenario.forEach(element => {
                 quad(blankNode('gluing' + count['gluing'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('gluingStation' + count['gluing'])),
                 quad(blankNode('gluing' + count['gluing'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('gluingStation' + count['gluing'])),
                 quad(blankNode('gluing' + count['gluing'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('gluingStation' + count['gluing'])),
-                quad(namedNode('gluingStation' + count['gluing']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('gluingStation' + count['gluing'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/gluingStation', 'gluing', 'smartphoneRecipe'))
             count['gluing'] += 1
             break
         }
@@ -924,17 +861,14 @@ scenario.forEach(element => {
                 quad(namedNode('stations/deliveryStation' + count['delivery']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/deliveryStation' + count['delivery'])),
                 quad(namedNode('stations/deliveryStation' + count['delivery']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/deliveryStation' + count['delivery'])),
                 quad(namedNode('stations/deliveryStation' + count['delivery']), namedNode(arena + 'skills'), namedNode(arena + 'delivery'), namedNode('stations/deliveryStation' + count['delivery'])),
-                quad(namedNode('stations/deliveryStation' + count['delivery']), namedNode(arena + 'queue'), namedNode('stations/deliveryStation' + count['delivery'] + 'TaskQueue'), namedNode('stations/deliveryStation' + count['delivery'])),
-                quad(namedNode('stations/deliveryStation' + count['delivery']), namedNode(arena + 'affordances'), namedNode('stations/deliveryStation' + count['delivery'] + 'Affordances'), namedNode('stations/deliveryStation' + count['delivery'])),
-                quad(namedNode('stations/deliveryStation' + count['delivery']), namedNode(arena + 'recipe'), namedNode('deliveryRecipe'), namedNode('stations/deliveryStation' + count['delivery'])),
                 quad(namedNode('stations/deliveryStation' + count['delivery']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/deliveryStation' + count['delivery'])),
                 quad(namedNode('stations/deliveryStation' + count['delivery']), namedNode(arena + 'inputPort'), blankNode('delivery' + count['delivery'] + 'input'), namedNode('stations/deliveryStation' + count['delivery'])),
                 quad(blankNode('delivery' + count['delivery'] + 'input'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/deliveryStation' + count['delivery'])),
                 quad(blankNode('delivery' + count['delivery'] + 'input'), namedNode(arena + 'locationX'), literal(inputX), namedNode('stations/deliveryStation' + count['delivery'])),
                 quad(blankNode('delivery' + count['delivery'] + 'input'), namedNode(arena + 'locationY'), literal(inputY), namedNode('stations/deliveryStation' + count['delivery'])),
                 quad(blankNode('delivery' + count['delivery'] + 'input'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/deliveryStation' + count['delivery'])),
-                quad(namedNode('stations/deliveryStation' + count['delivery']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/deliveryStation' + count['delivery'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/deliveryStation', 'delivery', 'deliveryRecipe'))
             count['delivery'] += 1
             break
         }
@@ -967,17 +901,14 @@ scenario.forEach(element => {
                 quad(namedNode('stations/glasStorageStation' + count['glasStorage']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/glasStorageStation' + count['glasStorage'])),
                 quad(namedNode('stations/glasStorageStation' + count['glasStorage']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/glasStorageStation' + count['glasStorage'])),
                 quad(namedNode('stations/glasStorageStation' + count['glasStorage']), namedNode(arena + 'skills'), namedNode(arena + 'glasStorage'), namedNode('stations/glasStorageStation' + count['glasStorage'])),
-                quad(namedNode('stations/glasStorageStation' + count['glasStorage']), namedNode(arena + 'queue'), namedNode('stations/glasStorageStation' + count['glasStorage'] + 'TaskQueue'), namedNode('stations/glasStorageStation' + count['glasStorage'])),
-                quad(namedNode('stations/glasStorageStation' + count['glasStorage']), namedNode(arena + 'affordances'), namedNode('stations/glasStorageStation' + count['glasStorage'] + 'Affordances'), namedNode('stations/glasStorageStation' + count['glasStorage'])),
-                quad(namedNode('stations/glasStorageStation' + count['glasStorage']), namedNode(arena + 'recipe'), namedNode('glasRecipe'), namedNode('stations/glasStorageStation' + count['glasStorage'])),
                 quad(namedNode('stations/glasStorageStation' + count['glasStorage']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/glasStorageStation' + count['glasStorage'])),
                 quad(namedNode('stations/glasStorageStation' + count['glasStorage']), namedNode(arena + 'outputPort'), blankNode('glasStorage' + count['glasStorage'] + 'output'), namedNode('stations/glasStorageStation' + count['glasStorage'])),
                 quad(blankNode('glasStorage' + count['glasStorage'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/glasStorageStation' + count['glasStorage'])),
                 quad(blankNode('glasStorage' + count['glasStorage'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/glasStorageStation' + count['glasStorage'])),
                 quad(blankNode('glasStorage' + count['glasStorage'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/glasStorageStation' + count['glasStorage'])),
                 quad(blankNode('glasStorage' + count['glasStorage'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/glasStorageStation' + count['glasStorage'])),
-                quad(namedNode('stations/glasStorageStation' + count['glasStorage']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/glasStorageStation' + count['glasStorage'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/glasStorageStation', 'glasStorage', 'glasRecipe'))
             count['glasStorage'] += 1
             break
         }
@@ -1010,17 +941,14 @@ scenario.forEach(element => {
                 quad(namedNode('stations/lcdStorageStation' + count['lcdStorage']), namedNode(arena + 'locationX2'), literal(x2), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
                 quad(namedNode('stations/lcdStorageStation' + count['lcdStorage']), namedNode(arena + 'locationY2'), literal(y2), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
                 quad(namedNode('stations/lcdStorageStation' + count['lcdStorage']), namedNode(arena + 'skills'), namedNode(arena + 'lcdStorage'), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
-                quad(namedNode('stations/lcdStorageStation' + count['lcdStorage']), namedNode(arena + 'queue'), namedNode('stations/lcdStorageStation' + count['lcdStorage'] + 'TaskQueue'), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
-                quad(namedNode('stations/lcdStorageStation' + count['lcdStorage']), namedNode(arena + 'affordances'), namedNode('stations/lcdStorageStation' + count['lcdStorage'] + 'Affordances'), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
-                quad(namedNode('stations/lcdStorageStation' + count['lcdStorage']), namedNode(arena + 'recipe'), namedNode('lcdRecipe'), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
                 quad(namedNode('stations/lcdStorageStation' + count['lcdStorage']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
                 quad(namedNode('stations/lcdStorageStation' + count['lcdStorage']), namedNode(arena + 'outputPort'), blankNode('lcdStorage' + count['lcdStorage'] + 'output'), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
                 quad(blankNode('lcdStorage' + count['lcdStorage'] + 'output'), namedNode(rdf + 'type'), namedNode(arena + 'Port'), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
                 quad(blankNode('lcdStorage' + count['lcdStorage'] + 'output'), namedNode(arena + 'locationX'), literal(outputX), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
                 quad(blankNode('lcdStorage' + count['lcdStorage'] + 'output'), namedNode(arena + 'locationY'), literal(outputY), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
                 quad(blankNode('lcdStorage' + count['lcdStorage'] + 'output'), namedNode(arena + 'capacity'), literal(2), namedNode('stations/lcdStorageStation' + count['lcdStorage'])),
-                quad(namedNode('stations/lcdStorageStation' + count['lcdStorage']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('stations/lcdStorageStation' + count['lcdStorage'] + 'TaskQueue')),
             ])
+            store.addQuads(getStationContainerQuads('stations/lcdStorageStation', 'lcdStorage', 'lcdRecipe'))
             count['lcdStorage'] += 1
             break
         }
@@ -1033,9 +961,8 @@ scenario.forEach(element => {
                 quad(namedNode('transporters/slowTransporter' + count['slowTransporter']), namedNode(arena + 'speed'), literal(0.5, namedNode(xsd + 'decimal')), namedNode('transporters/slowTransporter' + count['slowTransporter'])),
                 quad(namedNode('transporters/slowTransporter' + count['slowTransporter']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('transporters/slowTransporter' + count['slowTransporter'])),
                 quad(namedNode('transporters/slowTransporter' + count['slowTransporter']), namedNode(arena + 'capacity'), literal(4), namedNode('transporters/slowTransporter' + count['slowTransporter'])),
-                quad(namedNode('transporters/slowTransporter' + count['slowTransporter']), namedNode(arena + 'queue'), namedNode('transporters/slowTransporter' + count['slowTransporter'] + 'TaskQueue'), namedNode('transporters/slowTransporter' + count['slowTransporter'])),
-                quad(namedNode('transporters/slowTransporter' + count['slowTransporter']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('transporters/slowTransporter' + count['slowTransporter'] + 'TaskQueue')),
             ])
+            store.addQuads(getTransporterContainerQuads('transporters/slowTransporter', 'slowTransporter'))
             count['slowTransporter'] += 1
             break
         case 'fastTransporter':
@@ -1047,9 +974,8 @@ scenario.forEach(element => {
                 quad(namedNode('transporters/fastTransporter' + count['fastTransporter']), namedNode(arena + 'speed'), literal(1, namedNode(xsd + 'decimal')), namedNode('transporters/fastTransporter' + count['fastTransporter'])),
                 quad(namedNode('transporters/fastTransporter' + count['fastTransporter']), namedNode(arena + 'status'), namedNode(arena + 'idle'), namedNode('transporters/fastTransporter' + count['fastTransporter'])),
                 quad(namedNode('transporters/fastTransporter' + count['fastTransporter']), namedNode(arena + 'capacity'), literal(2), namedNode('transporters/fastTransporter' + count['fastTransporter'])),
-                quad(namedNode('transporters/fastTransporter' + count['fastTransporter']), namedNode(arena + 'queue'), namedNode('transporters/fastTransporter' + count['fastTransporter'] + 'TaskQueue'), namedNode('transporters/fastTransporter' + count['fastTransporter'])),
-                quad(namedNode('transporters/fastTransporter' + count['fastTransporter']), namedNode(arena + 'tasks'), namedNode(rdf + 'nil'), namedNode('transporters/fastTransporter' + count['fastTransporter'] + 'TaskQueue')),
             ])
+            store.addQuads(getTransporterContainerQuads('transporters/fastTransporter', 'fastTransporter'))
             count['fastTransporter'] += 1
             break
     }
@@ -1065,3 +991,43 @@ const writer = new N3.Writer(fs.createWriteStream(process.argv[2].substring(0, p
 });
 writer.addQuads(store.getQuads(null, null, null, null))
 writer.end()
+
+function getStationContainerQuads(stationName, countName, recipe) {
+    return [
+        // Indirect Container for properties, esp. recipe
+        quad(namedNode(stationName + count[countName]), namedNode(ldp + 'contains'), namedNode(stationName + count[countName] + '/properties'), namedNode(stationName + count[countName])),
+        quad(namedNode(stationName + count[countName] + '/properties'), namedNode(rdf + 'type'), namedNode(ldp + 'IndirectContainer'), namedNode(stationName + count[countName] + '/properties')),
+        quad(namedNode(stationName + count[countName] + '/properties'), namedNode(ldp + 'membershipResource'), namedNode(stationName + count[countName]), namedNode(stationName + count[countName] + '/properties')),
+        quad(namedNode(stationName + count[countName] + '/properties'), namedNode(ldp + 'hasMemberRelation'), namedNode(arena + 'recipe'), namedNode(stationName + count[countName] + '/properties')),
+        quad(namedNode(stationName + count[countName] + '/properties'), namedNode(ldp + 'insertedContentRelation'), namedNode(rdf + 'value'), namedNode(stationName + count[countName] + '/properties')),
+        quad(namedNode(stationName + count[countName] + '/properties'), namedNode(ldp + 'contains'), namedNode(stationName + count[countName] + '/properties/recipe'), namedNode(stationName + count[countName] + '/properties')),
+        quad(namedNode(stationName + count[countName] + '/properties/recipe'), namedNode(rdf + 'value'), namedNode('recipes/' + recipe), namedNode(stationName + count[countName] + '/properties/recipe')),
+        // Ordered Container for task queue
+        quad(namedNode(stationName + count[countName]), namedNode(ldp + 'contains'), namedNode(stationName + count[countName] + '/tasks'), namedNode(stationName + count[countName])),
+        quad(namedNode(stationName + count[countName] + '/tasks'), namedNode(rdf + 'type'), namedNode(ldp + 'OrderedContainer'), namedNode(stationName + count[countName] + '/tasks')),
+        quad(namedNode(stationName + count[countName] + '/tasks'), namedNode(ldp + 'membershipResource'), namedNode(stationName + count[countName]), namedNode(stationName + count[countName] + '/tasks')),
+        quad(namedNode(stationName + count[countName] + '/tasks'), namedNode(ldp + 'hasMemberRelation'), namedNode(arena + 'activeTask'), namedNode(stationName + count[countName] + '/tasks')),
+        quad(namedNode(stationName + count[countName] + '/tasks'), namedNode(ldp + 'orderContentRelation'), namedNode(arena + 'queuePosition'), namedNode(stationName + count[countName] + '/tasks')),
+        // Direct Container for affordances
+        quad(namedNode(stationName + count[countName]), namedNode(ldp + 'contains'), namedNode(stationName + count[countName] + '/affordances'), namedNode(stationName + count[countName])),
+        quad(namedNode(stationName + count[countName] + '/affordances'), namedNode(rdf + 'type'), namedNode(ldp + 'DirectContainer'), namedNode(stationName + count[countName] + '/affordances')),
+        quad(namedNode(stationName + count[countName] + '/affordances'), namedNode(ldp + 'membershipResource'), namedNode(stationName + count[countName]), namedNode(stationName + count[countName] + '/affordances')),
+        quad(namedNode(stationName + count[countName] + '/affordances'), namedNode(ldp + 'hasMemberRelation'), namedNode(arena + 'affords'), namedNode(stationName + count[countName] + '/affordances')),
+    ]
+}
+
+function getTransporterContainerQuads(transporterName, countName) {
+    return [
+        // Ordered Container for task queue
+        quad(namedNode(transporterName + count[countName]), namedNode(ldp + 'contains'), namedNode(transporterName + count[countName] + '/tasks'), namedNode(transporterName + count[countName])),
+        quad(namedNode(transporterName + count[countName] + '/tasks'), namedNode(rdf + 'type'), namedNode(ldp + 'OrderedContainer'), namedNode(transporterName + count[countName] + '/tasks')),
+        quad(namedNode(transporterName + count[countName] + '/tasks'), namedNode(ldp + 'membershipResource'), namedNode(transporterName + count[countName]), namedNode(transporterName + count[countName] + '/tasks')),
+        quad(namedNode(transporterName + count[countName] + '/tasks'), namedNode(ldp + 'hasMemberRelation'), namedNode(arena + 'activeTask'), namedNode(transporterName + count[countName] + '/tasks')),
+        quad(namedNode(transporterName + count[countName] + '/tasks'), namedNode(ldp + 'orderContentRelation'), namedNode(arena + 'queuePosition'), namedNode(transporterName + count[countName] + '/tasks')),
+        // Direct Container for affordances
+        quad(namedNode(transporterName + count[countName]), namedNode(ldp + 'contains'), namedNode(transporterName + count[countName] + '/affordances'), namedNode(transporterName + count[countName])),
+        quad(namedNode(transporterName + count[countName] + '/affordances'), namedNode(rdf + 'type'), namedNode(ldp + 'DirectContainer'), namedNode(transporterName + count[countName] + '/affordances')),
+        quad(namedNode(transporterName + count[countName] + '/affordances'), namedNode(ldp + 'membershipResource'), namedNode(transporterName + count[countName]), namedNode(transporterName + count[countName] + '/affordances')),
+        quad(namedNode(transporterName + count[countName] + '/affordances'), namedNode(ldp + 'hasMemberRelation'), namedNode(arena + 'affords'), namedNode(transporterName + count[countName] + '/affordances')),
+    ]
+}
