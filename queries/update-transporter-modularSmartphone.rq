@@ -16,10 +16,7 @@ DELETE {
     }
 } WHERE {
     ?t arena:status arena:idle ;
-        arena:tasks ?list .
-
-    ?list rdf:first ?task ;
-        rdf:rest ?rest .
+        arena:activeTask ?task .
 };
 
 # Switching state from busy to idle if task queue empty
@@ -33,8 +30,11 @@ DELETE {
         ?t arena:status arena:idle .
     }
 } WHERE {
-    ?t arena:status arena:busy ;
-        arena:tasks rdf:nil .
+    ?t arena:status arena:busy .
+
+    FILTER NOT EXISTS {
+        ?t arena:activeTask ?task .
+    }
 };
 
 # Calculating new simulated location in X direction
@@ -379,10 +379,7 @@ INSERT {
         ?task arena:startTime ?time .
     }
 } WHERE {
-    ?t arena:tasks ?list .
-
-    ?list rdf:first ?task ;
-        rdf:rest ?rest .
+    ?t arena:activeTask ?task .
 
     FILTER NOT EXISTS {
         ?task arena:startTime ?start .

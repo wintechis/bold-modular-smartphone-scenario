@@ -116,8 +116,4 @@
     "type": "fastTransporter",
     "x": 5,
     "y": 0
-}, {
-    "type": "slowTransporter",
-    "x": 4,
-    "y": 0
 }]

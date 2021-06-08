@@ -3,6 +3,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX arena: <http://arena2036.example.org/>
 PREFIX sim: <http://ti.rw.fau.de/sim#>
 PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX ldp: <http://www.w3.org/ns/ldp#>
 
 # If station is busy and already has a remaining time, remove location of inputs of first task and adapt port's capacity
 DELETE {
@@ -23,10 +24,7 @@ DELETE {
         arena:status arena:busy ;
         sim:simulatedRemainingTime ?time ;
         arena:inputPort ?port ;
-        arena:tasks ?list .
-
-    ?list rdf:first ?task ;
-        rdf:rest ?rest .
+        arena:activeTask ?task .
 
     ?task a arena:WorkstationTask ;
         arena:recipe ?recipe ;
@@ -65,10 +63,7 @@ INSERT {
     ?station a arena:Workstation ;
         arena:recipe ?recipe ;
         arena:status arena:busy ;
-        arena:tasks ?list .
-
-    ?list rdf:first ?task ;
-        rdf:rest ?rest .
+        arena:activeTask ?task .
 
     ?task a arena:WorkstationTask ;
         arena:recipe ?recipe ;
@@ -139,11 +134,8 @@ DELETE {
 
         ?port arena:capacity ?capacity .
     }
-    GRAPH ?queue {
-        ?station arena:tasks ?list .
-
-        ?list rdf:first ?task ;
-    	    rdf:rest ?rest .
+    GRAPH ?taskContainer {
+        ?taskContainer ldp:contains ?task .
     }
 } INSERT {
     GRAPH ?station {
@@ -152,9 +144,6 @@ DELETE {
     }
     GRAPH ?task {
         ?task arena:endTime ?time .
-    }
-    GRAPH ?queue {
-        ?station arena:tasks ?rest .
     }
     GRAPH ?product {
         ?product a arena:Product ;
@@ -167,16 +156,14 @@ DELETE {
     ?station a arena:Workstation ;
         sim:simulatedRemainingTime 0 ;
         arena:outputPort ?port ;
-        arena:queue ?queue ;
-        arena:tasks ?list .
+        ldp:contains ?taskContainer .
 
     ?port a arena:Port ;
         arena:capacity ?capacity ;
         arena:locationX ?locationX ;
         arena:locationY ?locationY .
 
-    ?list rdf:first ?task ;
-        rdf:rest ?rest .
+    ?taskContainer a arena:TaskContainer .
 
     ?task a arena:WorkstationTask ;
         arena:recipe ?recipe ;
