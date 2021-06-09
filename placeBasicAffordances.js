@@ -564,7 +564,7 @@ async function placeCombinedAffordances() {
 
                 let mapped = preMap.get(subjects[0].id);
                 if(!mapped) {
-                    mapped = new Cond();
+                    mapped = new Cond(subjects[0].value);
                     preMap.set(subjects[0].id, mapped);
                 }
 
@@ -587,7 +587,7 @@ async function placeCombinedAffordances() {
 
                 let mapped = postMap.get(subjects[0].id);
                 if(!mapped) {
-                    mapped = new Cond();
+                    mapped = new Cond(subjects[0].value);
                     postMap.set(subjects[0].id, mapped);
                 }
 
@@ -601,6 +601,7 @@ async function placeCombinedAffordances() {
         });
         await Promise.all(affs.map(async (obj1) => {
             return new Promise(async (resolve) => {
+                let mapBNodes = new Map();
                 let affordance1 = obj1.affordance;
                 let preconds = obj1.preconds;
                 let neededAffordances = new Set();
@@ -609,6 +610,7 @@ async function placeCombinedAffordances() {
                     let affordance2 = obj2.affordance;
                     let postcond = obj2.postconds[0];
                     let toHandle = preconds.filter((precond) => postcond.equals(precond));
+                    toHandle.forEach((prec) => mapBNodes.set(postcond.bNode, prec.bNode));
                     if(toHandle.length > 0) {
                         handledPreconds.add(toHandle[0]);
                         preconds = preconds.filter((cond) => !cond.equals(toHandle[0]));
@@ -637,6 +639,24 @@ async function placeCombinedAffordances() {
                             ...store.getQuads(precond, null, null),
                         ]).reduce((a, b) => a.concat(b), []);
                     }
+                    precondQuads = precondQuads.map((q) => {
+                        let subject = q.subject;
+                        let mappedSubject = mapBNodes.get(subject.value);
+                        if(mappedSubject) {
+                            subject = blankNode(mappedSubject);
+                        }
+                        let predicate = q.predicate;
+                        let mappedPredicate = mapBNodes.get(predicate.value);
+                        if(mappedPredicate) {
+                            predicate = blankNode(mappedPredicate);
+                        }
+                        let object = q.object;
+                        let mappedObject = mapBNodes.get(object.value);
+                        if(mappedObject) {
+                            object = blankNode(mappedObject);
+                        }
+                        return quad(subject, predicate, object);
+                    });
 
                     let postconditions = store.getObjects(affordance1, namedNode(ARENA + 'hasPostcondition'));
                     let postcondQuads;
@@ -652,6 +672,24 @@ async function placeCombinedAffordances() {
                     }
 
                     let taskQuads = tasks.map((task) => store.getQuads(task, null, null)).reduce((a, b) => a.concat(b), []);
+                    taskQuads = taskQuads.map((q) => {
+                        let subject = q.subject;
+                        let mappedSubject = mapBNodes.get(subject.value);
+                        if(mappedSubject) {
+                            subject = blankNode(mappedSubject);
+                        }
+                        let predicate = q.predicate;
+                        let mappedPredicate = mapBNodes.get(predicate.value);
+                        if(mappedPredicate) {
+                            predicate = blankNode(mappedPredicate);
+                        }
+                        let object = q.object;
+                        let mappedObject = mapBNodes.get(object.value);
+                        if(mappedObject) {
+                            object = blankNode(mappedObject);
+                        }
+                        return quad(subject, predicate, object);
+                    });
 
                     let taskList = blankNode();
                     await postRequest(affordanceContainer.value, [
@@ -666,7 +704,8 @@ async function placeCombinedAffordances() {
     });
 }
 
-function Cond() {
+function Cond(bNode) {
+  this['bNode'] = bNode;
   this[ARENA + 'kind'] = null;
   this[ARENA + 'locationX'] = null;
   this[ARENA + 'locationY'] = null;
