@@ -63,6 +63,15 @@ async function run() {
         ]);
         resolve();
     }, 500));
+
+    await new Promise(resolve => 
+    setTimeout(async () => {
+        await doStep([
+            crawl,
+            executeTasks,
+        ]);
+        resolve();
+    }, 500));
 }
 
 async function doStep(functions) {
@@ -704,6 +713,98 @@ async function placeCombinedAffordances() {
     });
 }
 
+async function executeTasks() {
+    return new Promise(async (resolve) => {
+        await Promise.all(store.getObjects(null, namedNode(ARENA + 'affords')).filter((affordance) => {
+            let preconds = store.getObjects(affordance, namedNode(ARENA + 'hasPrecondition'));
+            if(preconds.length == 1 && preconds[0].equals(namedNode(ARENA + 'none'))) {
+                let length = 0;
+                let kind = false;
+                store.getObjects(affordance, namedNode(ARENA + 'hasPostcondition')).forEach((postcond) => {
+                    length++;
+                    if(store.getQuads(postcond, RDF_PREDICATE, namedNode(ARENA + 'kind')).length > 0 &&
+                        store.getQuads(postcond, RDF_OBJECT, namedNode(ARENA + 'mainModule')).length > 0) {
+                            kind = true;
+                    }
+                });
+                return length == 4 && kind;
+            } else {
+                return false;
+            }
+        }).slice(0, 1).map(async(affordance) => {
+            return new Promise(async (resolve) => {
+                let productMap = new Map();
+                let taskList = rdfList2Array(store.getObjects(affordance, namedNode(ARENA + 'needsTask'))[0]);
+                taskList.map((task) => store.getQuads(task, null, null)).reduce((a, b) => a.concat(b), []).forEach((q) => {
+                    if(q.predicate.termType == "BlankNode") {
+                        let mapped = productMap.get(q.predicate.value);
+                        if(!mapped) {
+                            let product = namedNode('http://127.0.1.1:8080/products/product-' + generateUUID());
+                            productMap.set(q.predicate.value, product);
+                        }
+                    }
+                    if(q.object.termType == "BlankNode") {
+                        let mapped = productMap.get(q.object.value);
+                        if(!mapped) {
+                            let product = namedNode('http://127.0.1.1:8080/products/product-' + generateUUID());
+                            productMap.set(q.object.value, product);
+                        }
+                    }
+                });
+                await Promise.all(Array.from(productMap.values()).map((product) => {
+                    putRequest(product.id, [
+                        quad(product, RDF_TYPE, namedNode(ARENA + 'Product')),
+                    ]);
+                }));
+                await Promise.all(taskList.map(async (task, index) => {
+                    return new Promise(async (resolve) => {
+                        let instrument = store.getObjects(task, namedNode(ARENA + 'instrument'))[0];
+                        let affordanceContainer = store.getObjects(instrument, LDP_CONTAINS).filter((container) => store.getQuads(container, RDF_TYPE, namedNode(ARENA + 'TaskContainer')).length > 0)[0];
+                        let taskQuads = store.getQuads(task, null, null).map((q) => {
+                            let predicate = q.predicate;
+                            if(predicate.termType == "BlankNode") {
+                                let mapped = productMap.get(predicate.value);
+                                if(mapped) {
+                                    predicate = mapped;
+                                }
+                            }
+                            let object = q.object;
+                            if(object.termType == "BlankNode") {
+                                let mapped = productMap.get(object.value);
+                                if(mapped) {
+                                    object = mapped;
+                                }
+                            }
+                            return quad(namedNode(''), predicate, object);
+                        })
+                        taskQuads.push(quad(namedNode(''), namedNode(ARENA + 'queuePosition'), literal(index, XSD_INTEGER)));
+                        await postRequest(affordanceContainer.id, taskQuads);
+                        resolve();
+                    });
+                }));
+                resolve();
+            });
+        }));
+    });
+}
+
+function generateUUID() {
+  let
+    d = new Date().getTime(),
+    d2 = (performance && performance.now && (performance.now() * 1000)) || 0;
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    let r = Math.random() * 16;
+    if (d > 0) {
+      r = (d + r) % 16 | 0;
+      d = Math.floor(d / 16);
+    } else {
+      r = (d2 + r) % 16 | 0;
+      d2 = Math.floor(d2 / 16);
+    }
+    return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
+  });
+};
+
 function Cond(bNode) {
   this['bNode'] = bNode;
   this[ARENA + 'kind'] = null;
@@ -760,6 +861,33 @@ async function getRequest(uri) {
                 resolve(true);
             });
         }
+    });
+}
+
+async function putRequest(uri, quads) {
+    return new Promise(resolve => {
+        const writer = new N3.Writer();
+        quads.forEach((quad) => {
+            if(quad.subject.equals(defaultGraph())) {
+                writer.addQuad(namedNode(''), quad.predicate, quad.object);
+            } else {
+                writer.addQuad(quad.subject, quad.predicate, quad.object);
+            }
+        })
+        writer.end((error, result) => {
+            if(error) {
+                console.error(error);
+            }
+            fetch(uri, {
+                method: 'PUT',
+                body: result,
+                headers: {'Content-Type': 'text/turtle'}
+            }).then(res => {
+                console.log('PUT\t' + uri + '\t' + res.status);
+                numUnsafeRequest++;
+                resolve();
+            });
+        });
     });
 }
 
