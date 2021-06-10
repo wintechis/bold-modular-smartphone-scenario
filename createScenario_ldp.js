@@ -41,31 +41,15 @@ store.addQuads([
     quad(namedNode('/'), namedNode(rdf + 'type'), namedNode(ldp + 'BasicContainer'), namedNode('/')),
     quad(namedNode('/'), namedNode(ldp + 'contains'), namedNode('recipes'), namedNode('/')),
     quad(namedNode('recipes'), namedNode(rdf + 'type'), namedNode(ldp + 'BasicContainer'), namedNode('recipes')),
-    quad(namedNode('recipes'), namedNode(ldp + 'contains'), namedNode('recipes/mainboardRecipe'), namedNode('recipes')),
-    quad(namedNode('recipes/mainboardRecipe'), namedNode(rdf + 'type'), namedNode(arena + 'Recipe'), namedNode('recipes/mainboardRecipe')),
-    quad(namedNode('recipes/mainboardRecipe'), namedNode(arena + 'requiresSkill'), namedNode(arena + 'boardStorage'), namedNode('recipes/mainboardRecipe')),
-    quad(namedNode('recipes/mainboardRecipe'), namedNode(arena + 'requiresProducts'), namedNode(arena + 'none'), namedNode('recipes/mainboardRecipe')),
-    quad(namedNode('recipes/mainboardRecipe'), namedNode(arena + 'yieldsProducts'), namedNode(arena + 'mainboard'), namedNode('recipes/mainboardRecipe')),
-    quad(namedNode('recipes/mainboardRecipe'), namedNode(arena + 'baseProcessingTime'), literal(4), namedNode('recipes/mainboardRecipe')),
-    quad(namedNode('recipes/mainboardRecipe'), namedNode(arena + 'processingTimeVariance'), literal(1), namedNode('recipes/mainboardRecipe')),
-    quad(namedNode('recipes'), namedNode(ldp + 'contains'), namedNode('recipes/cpuRecipe'), namedNode('recipes')),
-    quad(namedNode('recipes/cpuRecipe'), namedNode(rdf + 'type'), namedNode(arena + 'Recipe'), namedNode('recipes/cpuRecipe')),
-    quad(namedNode('recipes/cpuRecipe'), namedNode(arena + 'requiresSkill'), namedNode(arena + 'cpuStorage'), namedNode('recipes/cpuRecipe')),
-    quad(namedNode('recipes/cpuRecipe'), namedNode(arena + 'requiresProducts'), namedNode(arena + 'none'), namedNode('recipes/cpuRecipe')),
-    quad(namedNode('recipes/cpuRecipe'), namedNode(arena + 'yieldsProducts'), namedNode(arena + 'cpu'), namedNode('recipes/cpuRecipe')),
-    quad(namedNode('recipes/cpuRecipe'), namedNode(arena + 'baseProcessingTime'), literal(5), namedNode('recipes/cpuRecipe')),
-    quad(namedNode('recipes/cpuRecipe'), namedNode(arena + 'processingTimeVariance'), literal(1), namedNode('recipes/cpuRecipe')),
-    quad(namedNode('recipes'), namedNode(ldp + 'contains'), namedNode('recipes/ramRecipe'), namedNode('recipes')),
-    quad(namedNode('recipes/ramRecipe'), namedNode(rdf + 'type'), namedNode(arena + 'Recipe'), namedNode('recipes/ramRecipe')),
-    quad(namedNode('recipes/ramRecipe'), namedNode(arena + 'requiresSkill'), namedNode(arena + 'memoryStorage'), namedNode('recipes/ramRecipe')),
-    quad(namedNode('recipes/ramRecipe'), namedNode(arena + 'requiresProducts'), namedNode(arena + 'none'), namedNode('recipes/ramRecipe')),
-    quad(namedNode('recipes/ramRecipe'), namedNode(arena + 'yieldsProducts'), namedNode(arena + 'ram'), namedNode('recipes/ramRecipe')),
-    quad(namedNode('recipes/ramRecipe'), namedNode(arena + 'baseProcessingTime'), literal(3), namedNode('recipes/ramRecipe')),
-    quad(namedNode('recipes/ramRecipe'), namedNode(arena + 'processingTimeVariance'), literal(1), namedNode('recipes/ramRecipe')),
-    quad(namedNode('/'), namedNode(ldp + 'contains'), namedNode('stations'), namedNode('/')),
-    quad(namedNode('stations'), namedNode(rdf + 'type'), namedNode(ldp + 'BasicContainer'), namedNode('stations')),
-    quad(namedNode('/'), namedNode(ldp + 'contains'), namedNode('transporters'), namedNode('/')),
-    quad(namedNode('transporters'), namedNode(rdf + 'type'), namedNode(ldp + 'BasicContainer'), namedNode('transporters')),
+    ...getRecipe('mainboardRecipe', 'boardStorage', [], [
+        'mainboard'
+    ], 4, 0, 1),
+    ...getRecipe('cpuRecipe', 'cpuStorage', [], [
+        'cpu'
+    ], 5, 0, 1),
+    ...getRecipe('ramRecipe', 'memoryStorage', [], [
+        'ram'
+    ], 3, 0, 1),
     ...getRecipe('flashMemoryRecipe', 'memoryStorage', [], [
         'flashMemory'
     ], 4, 0, 1),
@@ -77,6 +61,10 @@ store.addQuads([
     ], [
         'mainModule'
     ], 6, 1, 2),
+    quad(namedNode('/'), namedNode(ldp + 'contains'), namedNode('stations'), namedNode('/')),
+    quad(namedNode('stations'), namedNode(rdf + 'type'), namedNode(ldp + 'BasicContainer'), namedNode('stations')),
+    quad(namedNode('/'), namedNode(ldp + 'contains'), namedNode('transporters'), namedNode('/')),
+    quad(namedNode('transporters'), namedNode(rdf + 'type'), namedNode(ldp + 'BasicContainer'), namedNode('transporters')),
 ])
 
 scenario.forEach(element => {
@@ -1031,8 +1019,16 @@ function getTransporterContainerQuads(transporterName, countName) {
 }
 
 function getRecipe(name, skill, requires, yields, baseProcessingTime, inputProcessingTime, processingTimeVariance) {
-    let requiresList = requires.length >= 1 ? requires.map((r) => quad(namedNode('recipes/' + name), namedNode(arena + 'requiresProducts'), namedNode(arena + r), namedNode('recipes/' + name))) : [quad(namedNode('recipes/' + name), namedNode(arena + 'requiresProducts'), namedNode(arena + 'none'), namedNode('recipes/' + name))];
-    let yieldsList = yields.length >= 1 ? yields.map((r) => quad(namedNode('recipes/' + name), namedNode(arena + 'yieldsProducts'), namedNode(arena + r), namedNode('recipes/' + name))) : [quad(namedNode('recipes/' + name), namedNode(arena + 'yieldsProducts'), namedNode(arena + 'none'), namedNode('recipes/' + name))];
+    let requiresList = requires.length >= 1 ? requires.map((r) => {
+        return [
+            quad(namedNode('recipes/' + name), namedNode(arena + 'requiresProducts'), namedNode(arena + r), namedNode('recipes/' + name)),
+        ];
+    }).reduce((a, b) => a.concat(b), []) : [quad(namedNode('recipes/' + name), namedNode(arena + 'requiresProducts'), namedNode(arena + 'none'), namedNode('recipes/' + name))];
+    let yieldsList = yields.length >= 1 ? yields.map((r) => {
+        return [
+            quad(namedNode('recipes/' + name), namedNode(arena + 'yieldsProducts'), namedNode(arena + r), namedNode('recipes/' + name)),
+        ];
+    }).reduce((a, b) => a.concat(b), []) : [quad(namedNode('recipes/' + name), namedNode(arena + 'yieldsProducts'), namedNode(arena + 'none'), namedNode('recipes/' + name))];
     return [
         quad(namedNode('recipes'), namedNode(ldp + 'contains'), namedNode('recipes/' + name), namedNode('recipes')),
         quad(namedNode('recipes/' + name), namedNode(rdf + 'type'), namedNode(arena + 'Recipe'), namedNode('recipes/' + name)),

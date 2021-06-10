@@ -1,6 +1,7 @@
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX ldp: <http://www.w3.org/ns/ldp#>
 PREFIX arena: <http://arena2036.example.org/>
 PREFIX sim: <http://ti.rw.fau.de/sim#>
 
@@ -53,10 +54,7 @@ DELETE {
         sim:simulatedLocationY ?locationY ; 
         arena:speed ?speed ;
         arena:status arena:busy ;
-        arena:tasks ?list .
-
-        ?list rdf:first ?task ;
-            rdf:rest ?rest .
+        arena:activeTask ?task .
 
     ?task a arena:TransporterTask ;
         arena:instrument ?transporter ;
@@ -101,10 +99,7 @@ DELETE {
         arena:locationY ?locationY ; 
         arena:speed ?speed ;
         arena:status arena:busy ;
-        arena:tasks ?list .
-
-        ?list rdf:first ?task ;
-            rdf:rest ?rest .
+        arena:activeTask ?task .
 
     ?task a arena:TransporterTask ;
         arena:instrument ?transporter ;
@@ -214,16 +209,10 @@ DELETE {
 
 # Removing current task from task queue if fulfilled (i. e. location is correct, everything loaded and unloaded) and at end time
 DELETE {
-    GRAPH ?queue {
-        ?transporter arena:tasks ?list .
-
-        ?list rdf:first ?task ;
-    	    rdf:rest ?rest .
+    GRAPH ?taskContainer {
+        ?taskContainer ldp:contains ?task .
     }
 } INSERT {
-    GRAPH ?queue {
-        ?transporter arena:tasks ?rest .
-    }
     GRAPH ?transporter {
         ?transporter arena:products ?input .
     }
@@ -234,11 +223,10 @@ DELETE {
     ?transporter a arena:Transporter ;
         arena:locationX ?locationX ; 
         arena:locationY ?locationY ; 
-        arena:tasks ?list ;
-        arena:queue ?queue .
+        arena:activeTask ?task ;
+        ldp:contains ?taskContainer .
 
-    ?list rdf:first ?task ;
-        rdf:rest ?rest .
+    ?taskContainer a arena:TaskContainer .
 
     ?task a arena:TransporterTask ;
         arena:instrument ?transporter ;
@@ -247,9 +235,10 @@ DELETE {
 
     FILTER NOT EXISTS {
         ?task arena:input ?product .
-        ?port arena:products ?product .
-    
-        FILTER(?port != ?transporter)
+
+        FILTER NOT EXISTS {
+            ?transporter arena:products ?product .
+        }
     }
 
     FILTER NOT EXISTS {
@@ -284,10 +273,7 @@ DELETE {
         arena:locationX ?locationX ; 
         arena:locationY ?locationY ; 
         arena:capacity ?capacityTransporter ;
-        arena:tasks ?list .
-
-    ?list rdf:first ?task ;
-        rdf:rest ?rest .
+        arena:activeTask ?task .
 
     ?task a arena:TransporterTask ;
         arena:instrument ?transporter ;
@@ -340,10 +326,7 @@ DELETE {
         arena:locationY ?locationY ; 
         arena:capacity ?capacityTransporter ;
         arena:products ?product ;
-        arena:tasks ?list .
-
-    ?list rdf:first ?task ;
-        rdf:rest ?rest .
+        arena:activeTask ?task .
 
     ?task a arena:TransporterTask ;
         arena:instrument ?transporter ;

@@ -55,26 +55,32 @@ DELETE {
 };
 
 # Determining new random processing time for task if none present, station busy and all inputs are there
-INSERT {
+# Also: change recipe if wrong. TODO: Change later on
+DELETE {
     GRAPH ?station {
-        ?station sim:simulatedRemainingTime ?time .
+        ?station arena:recipe ?recipeStation .
+    }
+} INSERT {
+    GRAPH ?station {
+        ?station sim:simulatedRemainingTime ?time ;
+            arena:recipe ?recipeTask .
     }
 } WHERE {
     ?station a arena:Workstation ;
-        arena:recipe ?recipe ;
+        arena:recipe ?recipeStation ;
         arena:status arena:busy ;
         arena:activeTask ?task .
 
     ?task a arena:WorkstationTask ;
-        arena:recipe ?recipe ;
+        arena:recipe ?recipeTask ;
         arena:instrument ?station .
 
-    ?recipe a arena:Recipe ;
+    ?recipeTask a arena:Recipe ;
         arena:baseProcessingTime ?baseTime ;
         arena:processingTimeVariance ?timeVariance .
 
     OPTIONAL {
-        ?recipe arena:inputProcessingTime ?inputTime .
+        ?recipeTask arena:inputProcessingTime ?inputTime .
     }
 
     FILTER NOT EXISTS {
@@ -82,13 +88,13 @@ INSERT {
     }
 
     FILTER NOT EXISTS {
-        ?station arena:inputPort ?port .
+        ?station arena:inputPort ?inputPort .
 
         ?task arena:input ?product .
 
-        ?p arena:products ?product .
-
-        FILTER(?p != ?port)
+        FILTER NOT EXISTS {
+            ?inputPort arena:products ?product .
+        }
     }
 
     BIND(?baseTime + COALESCE(?inputTime, 0) * ?num AS ?baseInputTime)
@@ -148,7 +154,6 @@ DELETE {
     GRAPH ?product {
         ?product a arena:Product ;
             arena:kind ?kind ;
-            arena:reservationContainer ?reservations ;
             arena:locationX ?locationX ;
             arena:locationY ?locationY .
     }
@@ -156,6 +161,7 @@ DELETE {
     ?station a arena:Workstation ;
         sim:simulatedRemainingTime 0 ;
         arena:outputPort ?port ;
+        arena:activeTask ?task ;
         ldp:contains ?taskContainer .
 
     ?port a arena:Port ;
@@ -185,8 +191,6 @@ DELETE {
     }
 
     FILTER(?capacity >= ?num)
-
-    BIND(IRI(CONCAT(xsd:string(?product), "-reservations")) AS ?reservations)
 
     <sim> sim:currentTime [
         time:inXSDDateTimeStamp ?time
