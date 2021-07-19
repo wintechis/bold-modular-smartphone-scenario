@@ -31,25 +31,6 @@ async function run() {
     setTimeout(async () => {
         await doStep([
             crawl,
-            placeStorageAffordances,
-            placeStationAffordances,
-        ]);
-        resolve();
-    }, 500));
-
-    await new Promise(resolve => 
-    setTimeout(async () => {
-        await doStep([
-            crawl,
-            placeTransporterAffordances,
-        ]);
-        resolve();
-    }, 500));
-
-    await new Promise(resolve => 
-    setTimeout(async () => {
-        await doStep([
-            crawl,
             placeCombinedAffordances,
         ]);
         resolve();
@@ -60,15 +41,6 @@ async function run() {
         await doStep([
             crawl,
             placeCombinedAffordances,
-        ]);
-        resolve();
-    }, 500));
-
-    await new Promise(resolve => 
-    setTimeout(async () => {
-        await doStep([
-            crawl,
-            executeTasks,
         ]);
         resolve();
     }, 500));
