@@ -1,0 +1,942 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix arena: <http://arena2036.example.org/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+</> {
+</> a <http://www.w3.org/ns/ldp#BasicContainer>;
+    <http://www.w3.org/ns/ldp#contains> <recipes>, <workstations>, <transporters>, <shopfloor>
+}
+<recipes> {
+<recipes> a <http://www.w3.org/ns/ldp#BasicContainer>;
+    <http://www.w3.org/ns/ldp#contains> <recipes/mainboardRecipe>, <recipes/cpuRecipe>, <recipes/ramRecipe>, <recipes/flashMemoryRecipe>, <recipes/mainModuleRecipe>
+}
+<recipes/mainboardRecipe> {
+<recipes/mainboardRecipe> a arena:Recipe;
+    arena:requiresSkill arena:boardStorage;
+    arena:requiresProducts arena:none;
+    arena:yieldsProducts arena:mainboard;
+    arena:baseProcessingTime 4;
+    arena:inputProcessingTime 0;
+    arena:processingTimeVariance 1
+}
+<recipes/cpuRecipe> {
+<recipes/cpuRecipe> a arena:Recipe;
+    arena:requiresSkill arena:cpuStorage;
+    arena:requiresProducts arena:none;
+    arena:yieldsProducts arena:cpu;
+    arena:baseProcessingTime 5;
+    arena:inputProcessingTime 0;
+    arena:processingTimeVariance 1
+}
+<recipes/ramRecipe> {
+<recipes/ramRecipe> a arena:Recipe;
+    arena:requiresSkill arena:memoryStorage;
+    arena:requiresProducts arena:none;
+    arena:yieldsProducts arena:ram;
+    arena:baseProcessingTime 3;
+    arena:inputProcessingTime 0;
+    arena:processingTimeVariance 1
+}
+<recipes/flashMemoryRecipe> {
+<recipes/flashMemoryRecipe> a arena:Recipe;
+    arena:requiresSkill arena:memoryStorage;
+    arena:requiresProducts arena:none;
+    arena:yieldsProducts arena:flashMemory;
+    arena:baseProcessingTime 4;
+    arena:inputProcessingTime 0;
+    arena:processingTimeVariance 1
+}
+<recipes/mainModuleRecipe> {
+<recipes/mainModuleRecipe> a arena:Recipe;
+    arena:requiresSkill arena:soldering;
+    arena:requiresProducts arena:mainboard, arena:cpu, arena:ram, arena:flashMemory;
+    arena:yieldsProducts arena:mainModule;
+    arena:baseProcessingTime 6;
+    arena:inputProcessingTime 1;
+    arena:processingTimeVariance 2
+}
+<workstations> {
+<workstations> a <http://www.w3.org/ns/ldp#BasicContainer>;
+    <http://www.w3.org/ns/ldp#contains> <workstations/solderingStation1>, <workstations/solderingStation2>, <workstations/memoryStorageStation1>, <workstations/cpuStorageStation1>, <workstations/boardStorageStation1>, <workstations/portStorageStation1>, <workstations/fixingStation1>, <workstations/metalCastingStation1>, <workstations/plasticCastingStation1>, <workstations/metalStorageStation1>, <workstations/plasticStorageStation1>, <workstations/boltingStation1>, <workstations/boltingStation2>, <workstations/communicationStorageStation1>, <workstations/sensorStorageStation1>, <workstations/batteryCellStorageStation1>, <workstations/combiningStation1>, <workstations/gluingStation1>, <workstations/gluingStation2>, <workstations/glasStorageStation1>, <workstations/lcdStorageStation1>, <workstations/deliveryStation1>
+}
+<transporters> {
+<transporters> a <http://www.w3.org/ns/ldp#BasicContainer>;
+    <http://www.w3.org/ns/ldp#contains> <transporters/fastTransporter1>
+}
+<shopfloor> {
+<shopfloor> a arena:Shopfloor;
+    arena:sizeX 37;
+    arena:sizeY 22
+}
+<workstations/solderingStation1> {
+<workstations/solderingStation1> a <http://www.w3.org/ns/ldp#BasicContainer>, arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/solderingStation1/properties>, <workstations/solderingStation1/tasks>, <workstations/solderingStation1/affordances>;
+    arena:locationX1 9;
+    arena:locationY1 7;
+    arena:locationX2 12;
+    arena:locationY2 8;
+    arena:skills arena:soldering;
+    arena:status arena:idle;
+    arena:inputPort _:soldering1input;
+    arena:outputPort _:soldering1output.
+_:soldering1input a arena:Port;
+    arena:locationX 8;
+    arena:locationY 7;
+    arena:capacity 5.
+_:soldering1output a arena:Port;
+    arena:locationX 13;
+    arena:locationY 8;
+    arena:capacity 2
+}
+<workstations/solderingStation1/properties> {
+<workstations/solderingStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/solderingStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/solderingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/solderingStation1/properties/recipe> {
+<workstations/solderingStation1/properties/recipe> rdf:value <recipes/mainModuleRecipe>
+}
+<workstations/solderingStation1/tasks> {
+<workstations/solderingStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/solderingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/solderingStation1/affordances> {
+<workstations/solderingStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/solderingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/solderingStation2> {
+<workstations/solderingStation2> a <http://www.w3.org/ns/ldp#BasicContainer>, arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/solderingStation2/properties>, <workstations/solderingStation2/tasks>, <workstations/solderingStation2/affordances>;
+    arena:locationX1 9;
+    arena:locationY1 12;
+    arena:locationX2 12;
+    arena:locationY2 13;
+    arena:skills arena:soldering;
+    arena:status arena:idle;
+    arena:inputPort _:soldering2input;
+    arena:outputPort _:soldering2output.
+_:soldering2input a arena:Port;
+    arena:locationX 8;
+    arena:locationY 12;
+    arena:capacity 5.
+_:soldering2output a arena:Port;
+    arena:locationX 13;
+    arena:locationY 13;
+    arena:capacity 2
+}
+<workstations/solderingStation2/properties> {
+<workstations/solderingStation2/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/solderingStation2/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/solderingStation2>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/solderingStation2/properties/recipe> {
+<workstations/solderingStation2/properties/recipe> rdf:value <recipes/mainModuleRecipe>
+}
+<workstations/solderingStation2/tasks> {
+<workstations/solderingStation2/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/solderingStation2>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/solderingStation2/affordances> {
+<workstations/solderingStation2/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/solderingStation2>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/memoryStorageStation1> {
+<workstations/memoryStorageStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/memoryStorageStation1/properties>, <workstations/memoryStorageStation1/tasks>, <workstations/memoryStorageStation1/affordances>;
+    arena:locationX1 0;
+    arena:locationY1 0;
+    arena:locationX2 1;
+    arena:locationY2 1;
+    arena:skills arena:memoryStorage;
+    arena:status arena:idle;
+    arena:outputPort _:memoryStorage1output.
+_:memoryStorage1output a arena:Port;
+    arena:locationX 2;
+    arena:locationY 1;
+    arena:capacity 2
+}
+<workstations/memoryStorageStation1/properties> {
+<workstations/memoryStorageStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/memoryStorageStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/memoryStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/memoryStorageStation1/properties/recipe> {
+<workstations/memoryStorageStation1/properties/recipe> rdf:value <recipes/ramRecipe>
+}
+<workstations/memoryStorageStation1/tasks> {
+<workstations/memoryStorageStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/memoryStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/memoryStorageStation1/affordances> {
+<workstations/memoryStorageStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/memoryStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/cpuStorageStation1> {
+<workstations/cpuStorageStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/cpuStorageStation1/properties>, <workstations/cpuStorageStation1/tasks>, <workstations/cpuStorageStation1/affordances>;
+    arena:locationX1 0;
+    arena:locationY1 5;
+    arena:locationX2 1;
+    arena:locationY2 6;
+    arena:skills arena:cpuStorage;
+    arena:status arena:idle;
+    arena:outputPort _:cpuStorage1output.
+_:cpuStorage1output a arena:Port;
+    arena:locationX 2;
+    arena:locationY 6;
+    arena:capacity 2
+}
+<workstations/cpuStorageStation1/properties> {
+<workstations/cpuStorageStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/cpuStorageStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/cpuStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/cpuStorageStation1/properties/recipe> {
+<workstations/cpuStorageStation1/properties/recipe> rdf:value <recipes/cpuRecipe>
+}
+<workstations/cpuStorageStation1/tasks> {
+<workstations/cpuStorageStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/cpuStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/cpuStorageStation1/affordances> {
+<workstations/cpuStorageStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/cpuStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/boardStorageStation1> {
+<workstations/boardStorageStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/boardStorageStation1/properties>, <workstations/boardStorageStation1/tasks>, <workstations/boardStorageStation1/affordances>;
+    arena:locationX1 0;
+    arena:locationY1 10;
+    arena:locationX2 1;
+    arena:locationY2 11;
+    arena:skills arena:boardStorage;
+    arena:status arena:idle;
+    arena:outputPort _:boardStorage1output.
+_:boardStorage1output a arena:Port;
+    arena:locationX 2;
+    arena:locationY 11;
+    arena:capacity 2
+}
+<workstations/boardStorageStation1/properties> {
+<workstations/boardStorageStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/boardStorageStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/boardStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/boardStorageStation1/properties/recipe> {
+<workstations/boardStorageStation1/properties/recipe> rdf:value <recipes/mainboardRecipe>
+}
+<workstations/boardStorageStation1/tasks> {
+<workstations/boardStorageStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/boardStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/boardStorageStation1/affordances> {
+<workstations/boardStorageStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/boardStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/portStorageStation1> {
+<workstations/portStorageStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/portStorageStation1/properties>, <workstations/portStorageStation1/tasks>, <workstations/portStorageStation1/affordances>;
+    arena:locationX1 8;
+    arena:locationY1 0;
+    arena:locationX2 9;
+    arena:locationY2 2;
+    arena:skills arena:portStorage;
+    arena:status arena:idle;
+    arena:outputPort _:portStorage1output.
+_:portStorage1output a arena:Port;
+    arena:locationX 8;
+    arena:locationY 3;
+    arena:capacity 2
+}
+<workstations/portStorageStation1/properties> {
+<workstations/portStorageStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/portStorageStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/portStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/portStorageStation1/properties/recipe> {
+<workstations/portStorageStation1/properties/recipe> rdf:value <recipes/microUSBRecipe>
+}
+<workstations/portStorageStation1/tasks> {
+<workstations/portStorageStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/portStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/portStorageStation1/affordances> {
+<workstations/portStorageStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/portStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/fixingStation1> {
+<workstations/fixingStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/fixingStation1/properties>, <workstations/fixingStation1/tasks>, <workstations/fixingStation1/affordances>;
+    arena:locationX1 16;
+    arena:locationY1 3;
+    arena:locationX2 19;
+    arena:locationY2 4;
+    arena:skills arena:fixing;
+    arena:status arena:idle;
+    arena:inputPort _:fixing1input;
+    arena:outputPort _:fixing1output.
+_:fixing1input a arena:Port;
+    arena:locationX 15;
+    arena:locationY 3;
+    arena:capacity 5.
+_:fixing1output a arena:Port;
+    arena:locationX 20;
+    arena:locationY 4;
+    arena:capacity 2
+}
+<workstations/fixingStation1/properties> {
+<workstations/fixingStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/fixingStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/fixingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/fixingStation1/properties/recipe> {
+<workstations/fixingStation1/properties/recipe> rdf:value <recipes/mainModuleWithPortsRecipe>
+}
+<workstations/fixingStation1/tasks> {
+<workstations/fixingStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/fixingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/fixingStation1/affordances> {
+<workstations/fixingStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/fixingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/metalCastingStation1> {
+<workstations/metalCastingStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/metalCastingStation1/properties>, <workstations/metalCastingStation1/tasks>, <workstations/metalCastingStation1/affordances>;
+    arena:locationX1 25;
+    arena:locationY1 0;
+    arena:locationX2 29;
+    arena:locationY2 1;
+    arena:skills arena:metalCasting;
+    arena:status arena:idle;
+    arena:inputPort _:metalCasting1input;
+    arena:outputPort _:metalCasting1output.
+_:metalCasting1input a arena:Port;
+    arena:locationX 30;
+    arena:locationY 1;
+    arena:capacity 5.
+_:metalCasting1output a arena:Port;
+    arena:locationX 24;
+    arena:locationY 0;
+    arena:capacity 2
+}
+<workstations/metalCastingStation1/properties> {
+<workstations/metalCastingStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/metalCastingStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/metalCastingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/metalCastingStation1/properties/recipe> {
+<workstations/metalCastingStation1/properties/recipe> rdf:value <recipes/metalCaseRecipe>
+}
+<workstations/metalCastingStation1/tasks> {
+<workstations/metalCastingStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/metalCastingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/metalCastingStation1/affordances> {
+<workstations/metalCastingStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/metalCastingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/plasticCastingStation1> {
+<workstations/plasticCastingStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/plasticCastingStation1/properties>, <workstations/plasticCastingStation1/tasks>, <workstations/plasticCastingStation1/affordances>;
+    arena:locationX1 25;
+    arena:locationY1 3;
+    arena:locationX2 29;
+    arena:locationY2 4;
+    arena:skills arena:plasticCasting;
+    arena:status arena:idle;
+    arena:inputPort _:plasticCasting1input;
+    arena:outputPort _:plasticCasting1output.
+_:plasticCasting1input a arena:Port;
+    arena:locationX 30;
+    arena:locationY 4;
+    arena:capacity 5.
+_:plasticCasting1output a arena:Port;
+    arena:locationX 24;
+    arena:locationY 3;
+    arena:capacity 2
+}
+<workstations/plasticCastingStation1/properties> {
+<workstations/plasticCastingStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/plasticCastingStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/plasticCastingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/plasticCastingStation1/properties/recipe> {
+<workstations/plasticCastingStation1/properties/recipe> rdf:value <recipes/plasticCaseRecipe>
+}
+<workstations/plasticCastingStation1/tasks> {
+<workstations/plasticCastingStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/plasticCastingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/plasticCastingStation1/affordances> {
+<workstations/plasticCastingStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/plasticCastingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/metalStorageStation1> {
+<workstations/metalStorageStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/metalStorageStation1/properties>, <workstations/metalStorageStation1/tasks>, <workstations/metalStorageStation1/affordances>;
+    arena:locationX1 35;
+    arena:locationY1 0;
+    arena:locationX2 36;
+    arena:locationY2 1;
+    arena:skills arena:metalStorage;
+    arena:status arena:idle;
+    arena:outputPort _:metalStorage1output.
+_:metalStorage1output a arena:Port;
+    arena:locationX 34;
+    arena:locationY 0;
+    arena:capacity 2
+}
+<workstations/metalStorageStation1/properties> {
+<workstations/metalStorageStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/metalStorageStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/metalStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/metalStorageStation1/properties/recipe> {
+<workstations/metalStorageStation1/properties/recipe> rdf:value <recipes/metalRecipe>
+}
+<workstations/metalStorageStation1/tasks> {
+<workstations/metalStorageStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/metalStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/metalStorageStation1/affordances> {
+<workstations/metalStorageStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/metalStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/plasticStorageStation1> {
+<workstations/plasticStorageStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/plasticStorageStation1/properties>, <workstations/plasticStorageStation1/tasks>, <workstations/plasticStorageStation1/affordances>;
+    arena:locationX1 35;
+    arena:locationY1 3;
+    arena:locationX2 36;
+    arena:locationY2 4;
+    arena:skills arena:plasticStorage;
+    arena:status arena:idle;
+    arena:outputPort _:plasticStorage1output.
+_:plasticStorage1output a arena:Port;
+    arena:locationX 34;
+    arena:locationY 3;
+    arena:capacity 2
+}
+<workstations/plasticStorageStation1/properties> {
+<workstations/plasticStorageStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/plasticStorageStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/plasticStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/plasticStorageStation1/properties/recipe> {
+<workstations/plasticStorageStation1/properties/recipe> rdf:value <recipes/plasticRecipe>
+}
+<workstations/plasticStorageStation1/tasks> {
+<workstations/plasticStorageStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/plasticStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/plasticStorageStation1/affordances> {
+<workstations/plasticStorageStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/plasticStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/boltingStation1> {
+<workstations/boltingStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/boltingStation1/properties>, <workstations/boltingStation1/tasks>, <workstations/boltingStation1/affordances>;
+    arena:locationX1 19;
+    arena:locationY1 10;
+    arena:locationX2 20;
+    arena:locationY2 13;
+    arena:skills arena:bolting;
+    arena:status arena:idle;
+    arena:inputPort _:bolting1input;
+    arena:outputPort _:bolting1output.
+_:bolting1input a arena:Port;
+    arena:locationX 19;
+    arena:locationY 9;
+    arena:capacity 5.
+_:bolting1output a arena:Port;
+    arena:locationX 20;
+    arena:locationY 14;
+    arena:capacity 2
+}
+<workstations/boltingStation1/properties> {
+<workstations/boltingStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/boltingStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/boltingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/boltingStation1/properties/recipe> {
+<workstations/boltingStation1/properties/recipe> rdf:value <recipes/caseWithMainModuleRecipe>
+}
+<workstations/boltingStation1/tasks> {
+<workstations/boltingStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/boltingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/boltingStation1/affordances> {
+<workstations/boltingStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/boltingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/boltingStation2> {
+<workstations/boltingStation2> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/boltingStation2/properties>, <workstations/boltingStation2/tasks>, <workstations/boltingStation2/affordances>;
+    arena:locationX1 23;
+    arena:locationY1 10;
+    arena:locationX2 24;
+    arena:locationY2 13;
+    arena:skills arena:bolting;
+    arena:status arena:idle;
+    arena:inputPort _:bolting2input;
+    arena:outputPort _:bolting2output.
+_:bolting2input a arena:Port;
+    arena:locationX 23;
+    arena:locationY 9;
+    arena:capacity 5.
+_:bolting2output a arena:Port;
+    arena:locationX 24;
+    arena:locationY 14;
+    arena:capacity 2
+}
+<workstations/boltingStation2/properties> {
+<workstations/boltingStation2/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/boltingStation2/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/boltingStation2>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/boltingStation2/properties/recipe> {
+<workstations/boltingStation2/properties/recipe> rdf:value <recipes/caseWithMainModuleRecipe>
+}
+<workstations/boltingStation2/tasks> {
+<workstations/boltingStation2/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/boltingStation2>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/boltingStation2/affordances> {
+<workstations/boltingStation2/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/boltingStation2>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/communicationStorageStation1> {
+<workstations/communicationStorageStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/communicationStorageStation1/properties>, <workstations/communicationStorageStation1/tasks>, <workstations/communicationStorageStation1/affordances>;
+    arena:locationX1 0;
+    arena:locationY1 15;
+    arena:locationX2 1;
+    arena:locationY2 16;
+    arena:skills arena:communicationStorage;
+    arena:status arena:idle;
+    arena:outputPort _:communicationStorage1output;
+    arena:recipe <wifiRecipe>;
+    arena:queue <workstations/communicationStorageStation1TaskQueue>;
+    arena:affordances <workstations/communicationStorageStation1Affordances>.
+_:communicationStorage1output a arena:Port;
+    arena:locationX 2;
+    arena:locationY 16;
+    arena:capacity 2
+}
+<workstations/communicationStorageStation1TaskQueue> {
+<workstations/communicationStorageStation1> arena:tasks rdf:nil
+}
+<workstations/communicationStorageStation1/properties> {
+<workstations/communicationStorageStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/communicationStorageStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/communicationStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/communicationStorageStation1/properties/recipe> {
+<workstations/communicationStorageStation1/properties/recipe> rdf:value <recipes/wifiRecipe>
+}
+<workstations/communicationStorageStation1/tasks> {
+<workstations/communicationStorageStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/communicationStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/communicationStorageStation1/affordances> {
+<workstations/communicationStorageStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/communicationStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/sensorStorageStation1> {
+<workstations/sensorStorageStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/sensorStorageStation1/properties>, <workstations/sensorStorageStation1/tasks>, <workstations/sensorStorageStation1/affordances>;
+    arena:locationX1 0;
+    arena:locationY1 20;
+    arena:locationX2 1;
+    arena:locationY2 21;
+    arena:skills arena:sensorStorage;
+    arena:status arena:idle;
+    arena:outputPort _:sensorStorage1output.
+_:sensorStorage1output a arena:Port;
+    arena:locationX 2;
+    arena:locationY 21;
+    arena:capacity 2
+}
+<workstations/sensorStorageStation1/properties> {
+<workstations/sensorStorageStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/sensorStorageStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/sensorStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/sensorStorageStation1/properties/recipe> {
+<workstations/sensorStorageStation1/properties/recipe> rdf:value <recipes/cameraRecipe>
+}
+<workstations/sensorStorageStation1/tasks> {
+<workstations/sensorStorageStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/sensorStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/sensorStorageStation1/affordances> {
+<workstations/sensorStorageStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/sensorStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/batteryCellStorageStation1> {
+<workstations/batteryCellStorageStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/batteryCellStorageStation1/properties>, <workstations/batteryCellStorageStation1/tasks>, <workstations/batteryCellStorageStation1/affordances>;
+    arena:locationX1 34;
+    arena:locationY1 7;
+    arena:locationX2 36;
+    arena:locationY2 8;
+    arena:skills arena:batteryCellStorage;
+    arena:status arena:idle;
+    arena:outputPort _:batteryCellStorage1output.
+_:batteryCellStorage1output a arena:Port;
+    arena:locationX 33;
+    arena:locationY 7;
+    arena:capacity 2
+}
+<workstations/batteryCellStorageStation1/properties> {
+<workstations/batteryCellStorageStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/batteryCellStorageStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/batteryCellStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/batteryCellStorageStation1/properties/recipe> {
+<workstations/batteryCellStorageStation1/properties/recipe> rdf:value <recipes/batteryCellRecipe>
+}
+<workstations/batteryCellStorageStation1/tasks> {
+<workstations/batteryCellStorageStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/batteryCellStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/batteryCellStorageStation1/affordances> {
+<workstations/batteryCellStorageStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/batteryCellStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/combiningStation1> {
+<workstations/combiningStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/combiningStation1/properties>, <workstations/combiningStation1/tasks>, <workstations/combiningStation1/affordances>;
+    arena:locationX1 29;
+    arena:locationY1 10;
+    arena:locationX2 30;
+    arena:locationY2 13;
+    arena:skills arena:combining;
+    arena:status arena:idle;
+    arena:inputPort _:combining1input;
+    arena:outputPort _:combining1output.
+_:combining1input a arena:Port;
+    arena:locationX 29;
+    arena:locationY 9;
+    arena:capacity 5.
+_:combining1output a arena:Port;
+    arena:locationX 30;
+    arena:locationY 14;
+    arena:capacity 2
+}
+<workstations/combiningStation1/properties> {
+<workstations/combiningStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/combiningStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/combiningStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/combiningStation1/properties/recipe> {
+<workstations/combiningStation1/properties/recipe> rdf:value <recipes/batteryRecipe>
+}
+<workstations/combiningStation1/tasks> {
+<workstations/combiningStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/combiningStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/combiningStation1/affordances> {
+<workstations/combiningStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/combiningStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<gluingStation1> {
+<gluingStation1> a arena:Workstation;
+    arena:locationX1 14;
+    arena:locationY1 16;
+    arena:locationX2 16;
+    arena:locationY2 17;
+    arena:skills arena:gluing;
+    arena:status arena:idle;
+    arena:inputPort _:gluing1input;
+    arena:outputPort _:gluing1output.
+_:gluing1input a arena:Port;
+    arena:locationX 17;
+    arena:locationY 17;
+    arena:capacity 5.
+_:gluing1output a arena:Port;
+    arena:locationX 13;
+    arena:locationY 16;
+    arena:capacity 2
+}
+<workstations/gluingStation1> {
+<workstations/gluingStation1> <http://www.w3.org/ns/ldp#contains> <workstations/gluingStation1/properties>, <workstations/gluingStation1/tasks>, <workstations/gluingStation1/affordances>
+}
+<workstations/gluingStation1/properties> {
+<workstations/gluingStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/gluingStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/gluingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/gluingStation1/properties/recipe> {
+<workstations/gluingStation1/properties/recipe> rdf:value <recipes/smartphoneRecipe>
+}
+<workstations/gluingStation1/tasks> {
+<workstations/gluingStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/gluingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/gluingStation1/affordances> {
+<workstations/gluingStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/gluingStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<gluingStation2> {
+<gluingStation2> a arena:Workstation;
+    arena:locationX1 14;
+    arena:locationY1 20;
+    arena:locationX2 16;
+    arena:locationY2 21;
+    arena:skills arena:gluing;
+    arena:status arena:idle;
+    arena:inputPort _:gluing2input;
+    arena:outputPort _:gluing2output.
+_:gluing2input a arena:Port;
+    arena:locationX 17;
+    arena:locationY 21;
+    arena:capacity 5.
+_:gluing2output a arena:Port;
+    arena:locationX 13;
+    arena:locationY 20;
+    arena:capacity 2
+}
+<workstations/gluingStation2> {
+<workstations/gluingStation2> <http://www.w3.org/ns/ldp#contains> <workstations/gluingStation2/properties>, <workstations/gluingStation2/tasks>, <workstations/gluingStation2/affordances>
+}
+<workstations/gluingStation2/properties> {
+<workstations/gluingStation2/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/gluingStation2/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/gluingStation2>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/gluingStation2/properties/recipe> {
+<workstations/gluingStation2/properties/recipe> rdf:value <recipes/smartphoneRecipe>
+}
+<workstations/gluingStation2/tasks> {
+<workstations/gluingStation2/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/gluingStation2>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/gluingStation2/affordances> {
+<workstations/gluingStation2/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/gluingStation2>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/glasStorageStation1> {
+<workstations/glasStorageStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/glasStorageStation1/properties>, <workstations/glasStorageStation1/tasks>, <workstations/glasStorageStation1/affordances>;
+    arena:locationX1 35;
+    arena:locationY1 16;
+    arena:locationX2 36;
+    arena:locationY2 17;
+    arena:skills arena:glasStorage;
+    arena:status arena:idle;
+    arena:outputPort _:glasStorage1output.
+_:glasStorage1output a arena:Port;
+    arena:locationX 34;
+    arena:locationY 16;
+    arena:capacity 2
+}
+<workstations/glasStorageStation1/properties> {
+<workstations/glasStorageStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/glasStorageStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/glasStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/glasStorageStation1/properties/recipe> {
+<workstations/glasStorageStation1/properties/recipe> rdf:value <recipes/glasRecipe>
+}
+<workstations/glasStorageStation1/tasks> {
+<workstations/glasStorageStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/glasStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/glasStorageStation1/affordances> {
+<workstations/glasStorageStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/glasStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/lcdStorageStation1> {
+<workstations/lcdStorageStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/lcdStorageStation1/properties>, <workstations/lcdStorageStation1/tasks>, <workstations/lcdStorageStation1/affordances>;
+    arena:locationX1 35;
+    arena:locationY1 20;
+    arena:locationX2 36;
+    arena:locationY2 21;
+    arena:skills arena:lcdStorage;
+    arena:status arena:idle;
+    arena:outputPort _:lcdStorage1output.
+_:lcdStorage1output a arena:Port;
+    arena:locationX 34;
+    arena:locationY 20;
+    arena:capacity 2
+}
+<workstations/lcdStorageStation1/properties> {
+<workstations/lcdStorageStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/lcdStorageStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/lcdStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/lcdStorageStation1/properties/recipe> {
+<workstations/lcdStorageStation1/properties/recipe> rdf:value <recipes/lcdRecipe>
+}
+<workstations/lcdStorageStation1/tasks> {
+<workstations/lcdStorageStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/lcdStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/lcdStorageStation1/affordances> {
+<workstations/lcdStorageStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/lcdStorageStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<workstations/deliveryStation1> {
+<workstations/deliveryStation1> a arena:Workstation;
+    <http://www.w3.org/ns/ldp#contains> <workstations/deliveryStation1/properties>, <workstations/deliveryStation1/tasks>, <workstations/deliveryStation1/affordances>;
+    arena:locationX1 7;
+    arena:locationY1 19;
+    arena:locationX2 8;
+    arena:locationY2 21;
+    arena:skills arena:delivery;
+    arena:status arena:idle;
+    arena:inputPort _:delivery1input.
+_:delivery1input a arena:Port;
+    arena:locationX 8;
+    arena:locationY 18;
+    arena:capacity 2
+}
+<workstations/deliveryStation1/properties> {
+<workstations/deliveryStation1/properties> a <http://www.w3.org/ns/ldp#IndirectContainer>, arena:PropertyContainer;
+    <http://www.w3.org/ns/ldp#contains> <workstations/deliveryStation1/properties/recipe>;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/deliveryStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:recipe;
+    <http://www.w3.org/ns/ldp#insertedContentRelation> rdf:value
+}
+<workstations/deliveryStation1/properties/recipe> {
+<workstations/deliveryStation1/properties/recipe> rdf:value <recipes/deliveryRecipe>
+}
+<workstations/deliveryStation1/tasks> {
+<workstations/deliveryStation1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/deliveryStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<workstations/deliveryStation1/affordances> {
+<workstations/deliveryStation1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <workstations/deliveryStation1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}
+<transporters/fastTransporter1> {
+<transporters/fastTransporter1> a arena:Transporter;
+    <http://www.w3.org/ns/ldp#contains> <transporters/fastTransporter1/tasks>, <transporters/fastTransporter1/affordances>;
+    arena:status arena:idle;
+    arena:locationX 5;
+    arena:locationY 0;
+    arena:capacity 2;
+    arena:speed "1"^^xsd:decimal
+}
+<transporters/fastTransporter1/tasks> {
+<transporters/fastTransporter1/tasks> a <http://www.w3.org/ns/ldp#OrderedContainer>, arena:TaskContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <transporters/fastTransporter1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:activeTask;
+    <http://www.w3.org/ns/ldp#orderContentRelation> arena:queuePosition
+}
+<transporters/fastTransporter1/affordances> {
+<transporters/fastTransporter1/affordances> a <http://www.w3.org/ns/ldp#DirectContainer>, arena:AffordanceContainer;
+    <http://www.w3.org/ns/ldp#membershipResource> <transporters/fastTransporter1>;
+    <http://www.w3.org/ns/ldp#hasMemberRelation> arena:affords
+}

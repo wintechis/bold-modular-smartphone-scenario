@@ -7,6 +7,7 @@ const rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 const arena = 'http://arena2036.example.org/'
 const xsd = 'http://www.w3.org/2001/XMLSchema#'
 const ldp = 'http://www.w3.org/ns/ldp#'
+const lds = 'https://solid.ti.rw.fau.de/public/ns/linked-data-structures#'
 
 let rawdata = fs.readFileSync(process.argv[2]);
 let scenario = JSON.parse(rawdata);
@@ -986,11 +987,11 @@ function getStationContainerQuads(stationName, countName, recipe) {
         quad(namedNode(stationName + count[countName] + '/properties/recipe'), namedNode(rdf + 'value'), namedNode('recipes/' + recipe), namedNode(stationName + count[countName] + '/properties/recipe')),
         // Ordered Container for task queue
         quad(namedNode(stationName + count[countName]), namedNode(ldp + 'contains'), namedNode(stationName + count[countName] + '/tasks'), namedNode(stationName + count[countName])),
-        quad(namedNode(stationName + count[countName] + '/tasks'), namedNode(rdf + 'type'), namedNode(ldp + 'OrderedContainer'), namedNode(stationName + count[countName] + '/tasks')),
+        quad(namedNode(stationName + count[countName] + '/tasks'), namedNode(rdf + 'type'), namedNode(lds + 'OrderedContainer'), namedNode(stationName + count[countName] + '/tasks')),
         quad(namedNode(stationName + count[countName] + '/tasks'), namedNode(rdf + 'type'), namedNode(arena + 'TaskContainer'), namedNode(stationName + count[countName] + '/tasks')),
         quad(namedNode(stationName + count[countName] + '/tasks'), namedNode(ldp + 'membershipResource'), namedNode(stationName + count[countName]), namedNode(stationName + count[countName] + '/tasks')),
         quad(namedNode(stationName + count[countName] + '/tasks'), namedNode(ldp + 'hasMemberRelation'), namedNode(arena + 'activeTask'), namedNode(stationName + count[countName] + '/tasks')),
-        quad(namedNode(stationName + count[countName] + '/tasks'), namedNode(ldp + 'orderContentRelation'), namedNode(arena + 'queuePosition'), namedNode(stationName + count[countName] + '/tasks')),
+        quad(namedNode(stationName + count[countName] + '/tasks'), namedNode(lds + 'orderContentRelation'), namedNode(arena + 'queuePosition'), namedNode(stationName + count[countName] + '/tasks')),
         // Direct Container for affordances
         quad(namedNode(stationName + count[countName]), namedNode(ldp + 'contains'), namedNode(stationName + count[countName] + '/affordances'), namedNode(stationName + count[countName])),
         quad(namedNode(stationName + count[countName] + '/affordances'), namedNode(rdf + 'type'), namedNode(ldp + 'DirectContainer'), namedNode(stationName + count[countName] + '/affordances')),
@@ -1004,11 +1005,12 @@ function getTransporterContainerQuads(transporterName, countName) {
     return [
         // Ordered Container for task queue
         quad(namedNode(transporterName + count[countName]), namedNode(ldp + 'contains'), namedNode(transporterName + count[countName] + '/tasks'), namedNode(transporterName + count[countName])),
-        quad(namedNode(transporterName + count[countName] + '/tasks'), namedNode(rdf + 'type'), namedNode(ldp + 'OrderedContainer'), namedNode(transporterName + count[countName] + '/tasks')),
+        quad(namedNode(transporterName + count[countName] + '/tasks'), namedNode(rdf + 'type'), namedNode(lds + 'OrderedContainer'), namedNode(transporterName + count[countName] + '/tasks')),
         quad(namedNode(transporterName + count[countName] + '/tasks'), namedNode(rdf + 'type'), namedNode(arena + 'TaskContainer'), namedNode(transporterName + count[countName] + '/tasks')),
         quad(namedNode(transporterName + count[countName] + '/tasks'), namedNode(ldp + 'membershipResource'), namedNode(transporterName + count[countName]), namedNode(transporterName + count[countName] + '/tasks')),
         quad(namedNode(transporterName + count[countName] + '/tasks'), namedNode(ldp + 'hasMemberRelation'), namedNode(arena + 'activeTask'), namedNode(transporterName + count[countName] + '/tasks')),
-        quad(namedNode(transporterName + count[countName] + '/tasks'), namedNode(ldp + 'orderContentRelation'), namedNode(arena + 'queuePosition'), namedNode(transporterName + count[countName] + '/tasks')),
+        quad(namedNode(transporterName + count[countName] + '/tasks'), namedNode(lds + 'orderContentRelation'), namedNode(arena + 'queuePosition'), namedNode(transporterName + count[countName] + '/tasks')),
+
         // Direct Container for affordances
         quad(namedNode(transporterName + count[countName]), namedNode(ldp + 'contains'), namedNode(transporterName + count[countName] + '/affordances'), namedNode(transporterName + count[countName])),
         quad(namedNode(transporterName + count[countName] + '/affordances'), namedNode(rdf + 'type'), namedNode(ldp + 'DirectContainer'), namedNode(transporterName + count[countName] + '/affordances')),

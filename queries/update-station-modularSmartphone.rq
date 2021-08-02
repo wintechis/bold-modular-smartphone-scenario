@@ -117,7 +117,7 @@ DELETE {
 
 # Calculating new simulated remaining time
 DELETE {
-    GRAPH ?transporter {
+    GRAPH ?station {
         ?station sim:simulatedRemainingTime ?time .
     }
 } INSERT {
